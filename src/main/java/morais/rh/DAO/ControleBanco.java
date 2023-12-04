@@ -1,0 +1,53 @@
+package morais.rh.DAO;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+public class ControleBanco {
+
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/porto";
+    private static final String DB_USER = "root";
+    private static final String DB_PASSWORD = "rh0712";
+
+    private Connection conexao = null;
+
+    public void ConectorDB() {
+            conectarAoBanco();
+    }
+
+    private void conectarAoBanco() {
+        try {
+            // Carregar o driver JDBC do MySQL
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            // Estabelecer a conexão com o banco de dados MySQL
+            conexao = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+            System.out.println("Conexão bem-sucedida!");
+
+        } catch (ClassNotFoundException e) {
+            System.out.println("Driver do MySQL não encontrado!");
+            e.printStackTrace();
+        } catch (SQLException e) {
+            System.out.println("Falha na conexão com o banco de dados!");
+            e.printStackTrace();
+        }
+    }
+
+    public void fecharConexao() {
+        if (conexao != null) {
+            try {
+                conexao.close();
+                System.out.println("Conexão fechada.");
+            } catch (SQLException e) {
+                System.out.println("Erro ao fechar a conexão!");
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public Connection getConnection() {
+        return conexao;
+    }
+    
+}

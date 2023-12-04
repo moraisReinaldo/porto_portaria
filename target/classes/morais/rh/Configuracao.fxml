@@ -3,9 +3,12 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -27,7 +30,7 @@
             <Font size="40.0" />
          </font>
       </Label>
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
          <children>
             <Label text="Cadastro de Funcionarios ">
                <VBox.margin>
@@ -37,7 +40,7 @@
                   <Font size="20.0" />
                </font>
             </Label>
-            <TextField fx:id="Tusuario" promptText="Usuario">
+            <TextField fx:id="Iusuario" promptText="Usuario">
                <VBox.margin>
                   <Insets bottom="20.0" left="20.0" right="20.0" />
                </VBox.margin>
@@ -45,7 +48,7 @@
                   <Font size="15.0" />
                </font>
             </TextField>
-            <TextField fx:id="Tsenha" promptText="Senha">
+            <TextField fx:id="Isenha" promptText="Senha">
                <VBox.margin>
                   <Insets bottom="20.0" left="20.0" right="20.0" />
                </VBox.margin>
@@ -63,8 +66,71 @@
                   <Font size="15.0" />
                </font>
             </Button>
+            <TableView fx:id="Tusuarios" prefHeight="200.0" prefWidth="200.0">
+              <columns>
+                <TableColumn fx:id="TCcod" prefWidth="75.0" text="Codigo" />
+                <TableColumn fx:id="TCusu" prefWidth="265.59996185302737" text="Usuario" />
+              </columns>
+            </TableView>
+            <Label text="Remover funcionario" />
+            <HBox alignment="CENTER" prefHeight="40.0" prefWidth="342.0" spacing="10.0">
+               <children>
+                  <TextField fx:id="LCodfun" promptText="Codigo do funcionario" />
+                  <Button fx:id="BremoveC" mnemonicParsing="false" text="Remover" />
+               </children>
+            </HBox>
          </children>
       </VBox>
       <Button fx:id="Bfinaliza" mnemonicParsing="false" text="Finalizar" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+      <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="1">
+         <children>
+            <Label text="Veiculos Cadastrados">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <TableView fx:id="Tveiculos" prefHeight="338.0" prefWidth="322.0">
+              <columns>
+                <TableColumn fx:id="TCcodV" prefWidth="75.0" text="Codigo" />
+                <TableColumn fx:id="TCnomeV" prefWidth="246.39997711181638" text="Nome" />
+              </columns>
+            </TableView>
+            <Label text="Remover cadastro de veiculo" />
+            <HBox alignment="CENTER" prefHeight="40.0" prefWidth="342.0" spacing="10.0">
+               <children>
+                  <TextField fx:id="LCodVei" promptText="Codigo do veiculo" />
+                  <Button fx:id="BremoveV" mnemonicParsing="false" text="Remover" />
+               </children>
+            </HBox>
+         </children>
+         <GridPane.margin>
+            <Insets left="20.0" top="20.0" />
+         </GridPane.margin>
+      </VBox>
+      <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+         <children>
+            <Label text="Pessoas Cadastradas">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <TableView fx:id="Tpessoas" prefHeight="338.0" prefWidth="322.0">
+               <columns>
+                  <TableColumn fx:id="TCcodP" prefWidth="75.0" text="Codigo" />
+                  <TableColumn fx:id="TCnomeP" prefWidth="246.39997711181638" text="Nome" />
+               </columns>
+            </TableView>
+            <Label text="Remover cadastro de pessoa" />
+            <HBox alignment="CENTER" prefHeight="40.0" prefWidth="342.0" spacing="10.0">
+               <children>
+                  <TextField fx:id="LcodP" promptText="Codigo da pessoa" />
+                  <Button fx:id="BremoveP" mnemonicParsing="false" text="Remover" />
+               </children>
+            </HBox>
+         </children>
+         <padding>
+            <Insets right="20.0" top="20.0" />
+         </padding>
+      </VBox>
    </children>
 </GridPane>

@@ -3,7 +3,6 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
-<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
@@ -94,7 +93,7 @@
                   <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
                         <Label text="Tipo de visitante" />
-                        <ComboBox fx:id="Ctipo" prefWidth="150.0" />
+                        <ChoiceBox fx:id="Ctipo" prefWidth="150.0" />
                      </children>
                   </VBox>
                   <VBox prefHeight="106.0" prefWidth="722.0">
