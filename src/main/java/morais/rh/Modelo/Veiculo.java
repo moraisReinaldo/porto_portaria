@@ -2,13 +2,15 @@ package morais.rh.Modelo;
 
 public class Veiculo {
     
-    String placa, cor, modelo, ramal;
+    String placa, cor, modelo, ramal, desc;
+
 
     public Veiculo(String placa, String cor, String modelo, String ramal) {
         this.placa = placa.toUpperCase();
         this.cor = cor;
         this.modelo = modelo;
         this.ramal = ramal;
+        this.desc = modelo + " " + cor;
     }
 
     public String getPlaca() {
@@ -41,6 +43,18 @@ public class Veiculo {
 
     public void setRamal(String ramal) {
         this.ramal = ramal;
+    }
+
+
+
+    public String getDesc() {
+        return desc;
+    }
+
+
+
+    public void setDesc(String desc) {
+        this.desc = desc;
     } 
 
 }

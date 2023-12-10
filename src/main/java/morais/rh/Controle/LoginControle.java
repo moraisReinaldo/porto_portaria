@@ -19,8 +19,6 @@ import morais.rh.Modelo.Usuario;
 
 public class LoginControle {
 
-    ArrayList<Usuario> usus = UsuarioDAO.buscarUsuario();
-
     @FXML
     Button Bentrar;
 
@@ -36,6 +34,7 @@ public class LoginControle {
     @FXML
     TextField Lusuario;
 
+    ArrayList<Usuario> usus = UsuarioDAO.buscarUsuario();
 
     public void initialize(){
 

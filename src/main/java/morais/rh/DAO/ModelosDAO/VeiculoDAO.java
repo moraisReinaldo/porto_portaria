@@ -20,7 +20,7 @@ public class VeiculoDAO {
     
         try {
             PreparedStatement stmt = conexao.prepareStatement(sql);
-            stmt.setString(1, veiculo.getPlaca());
+            stmt.setString(1, veiculo.getPlaca().toUpperCase());
             stmt.setString(2, veiculo.getCor());
             stmt.setString(3, veiculo.getModelo());
             stmt.setString(4, veiculo.getRamal());
@@ -62,11 +62,11 @@ public class VeiculoDAO {
     }
     
 
-    public static void apagarVeiculo(int cod) {
+    public static void apagarVeiculo(String placa) {
         try {
             String sql = "DELETE FROM Veiculo WHERE VeiPlaca = ?";
             PreparedStatement preparedStatement = conexao.prepareStatement(sql);
-            preparedStatement.setInt(1, cod);
+            preparedStatement.setString(1, placa.toUpperCase());
 
             int linhasAfetadas = preparedStatement.executeUpdate();
 

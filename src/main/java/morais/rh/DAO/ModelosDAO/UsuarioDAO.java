@@ -16,12 +16,13 @@ public class UsuarioDAO {
     private static Connection conexao = controle.getConnection();
 
     public static void adicionaUsuario(Usuario usuario) throws IOException {
-        String sql = "INSERT INTO Usuario(UsuSenha, UsuNome) VALUES(?, ?)";
+        String sql = "INSERT INTO Usuario(UsuCod,UsuSenha, UsuNome) VALUES(?,?, ?)";
     
         try {
             PreparedStatement stmt = conexao.prepareStatement(sql);
-            stmt.setString(1, usuario.getSenha());
-            stmt.setString(2, usuario.getUsuario());
+            stmt.setInt(1, usuario.getCod());
+            stmt.setString(2, usuario.getSenha());
+            stmt.setString(3, usuario.getUsuario());
     
             stmt.execute();
             stmt.close();
@@ -45,8 +46,9 @@ public class UsuarioDAO {
 
                 String senha = resultSet.getString("UsuSenha");
                 String nome = resultSet.getString("UsuNome");
+                int cod = resultSet.getInt("UsuCod");
     
-                Usuario usuario = new Usuario(nome, senha);
+                Usuario usuario = new Usuario(nome, senha,cod);
                 usuarios.add(usuario);
             }
         } catch (SQLException e) {
@@ -59,8 +61,9 @@ public class UsuarioDAO {
     
 
     public static void apagarUsuario(int cod) {
+        if(cod != 0){
         try {
-            String sql = "DELETE FROM Usuario WHERE PesCodigo = ?";
+            String sql = "DELETE FROM Usuario WHERE UsuCod = ?";
             PreparedStatement preparedStatement = conexao.prepareStatement(sql);
             preparedStatement.setInt(1, cod);
 
@@ -75,7 +78,6 @@ public class UsuarioDAO {
             e.printStackTrace();
             throw new RuntimeException("Erro ao apagar usuario no banco de dados: " + e.getMessage());
         }
+        }
     }
-
-    
 }

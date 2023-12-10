@@ -3,10 +3,12 @@ package morais.rh.Modelo;
 public class Usuario {
 
     String usuario, senha;
+    int cod;
 
-    public Usuario(String usuario, String senha) {
+    public Usuario(String usuario, String senha, int cod) {
         this.usuario = usuario;
         this.senha = senha;
+        this.cod = cod;
     }
 
     public String getUsuario() {
@@ -23,6 +25,14 @@ public class Usuario {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public int getCod() {
+        return cod;
+    }
+
+    public void setCod(int cod) {
+        this.cod = cod;
     }
 
 }

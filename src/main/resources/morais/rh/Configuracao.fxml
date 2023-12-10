@@ -91,14 +91,14 @@
             </Label>
             <TableView fx:id="Tveiculos" prefHeight="338.0" prefWidth="322.0">
               <columns>
-                <TableColumn fx:id="TCcodV" prefWidth="75.0" text="Codigo" />
-                <TableColumn fx:id="TCnomeV" prefWidth="246.39997711181638" text="Nome" />
+                <TableColumn fx:id="TCcodV" prefWidth="75.0" text="Placa" />
+                <TableColumn fx:id="TCnomeV" prefWidth="246.39997711181638" text="Descrição" />
               </columns>
             </TableView>
             <Label text="Remover cadastro de veiculo" />
             <HBox alignment="CENTER" prefHeight="40.0" prefWidth="342.0" spacing="10.0">
                <children>
-                  <TextField fx:id="LCodVei" promptText="Codigo do veiculo" />
+                  <TextField fx:id="LCodVei" promptText="Placa do veiculo" />
                   <Button fx:id="BremoveV" mnemonicParsing="false" text="Remover" />
                </children>
             </HBox>
