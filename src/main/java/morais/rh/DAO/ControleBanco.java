@@ -12,16 +12,17 @@ public class ControleBanco {
 
     private Connection conexao = null;
 
-    public void ConectorDB() {
-            conectarAoBanco();
+    // Constructor to establish the database connection
+    public ControleBanco() {
+        conectarAoBanco();
     }
 
     private void conectarAoBanco() {
         try {
-            // Carregar o driver JDBC do MySQL
+            // Load the JDBC driver for MySQL
             Class.forName("com.mysql.cj.jdbc.Driver");
 
-            // Estabelecer a conexão com o banco de dados MySQL
+            // Establish the connection to the MySQL database
             conexao = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
             System.out.println("Conexão bem-sucedida!");
 
@@ -34,6 +35,7 @@ public class ControleBanco {
         }
     }
 
+    // Close the database connection
     public void fecharConexao() {
         if (conexao != null) {
             try {
@@ -46,8 +48,8 @@ public class ControleBanco {
         }
     }
 
+    // Getter method to retrieve the connection
     public Connection getConnection() {
         return conexao;
     }
-    
 }
