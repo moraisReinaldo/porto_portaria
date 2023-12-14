@@ -16,7 +16,7 @@ public class PessoaDAO {
     private static Connection conexao = controle.getConnection();
 
     public static void adicionaPessoa(Pessoa pessoa) throws IOException {
-        String sql = "INSERT INTO Pessoa(PesCodigo, PesNome, PesDoc, PesTelefone, PesRamal) VALUES(?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Pessoa(PesCodigo, PesNome, PesDoc, PesTelefone, PesRamal, PesTipo) VALUES(?, ?, ?, ?, ?,?)";
     
         try {
             PreparedStatement stmt = conexao.prepareStatement(sql);
@@ -25,6 +25,7 @@ public class PessoaDAO {
             stmt.setString(3, pessoa.getDocumento());
             stmt.setString(4, pessoa.getTelefone());
             stmt.setString(5, pessoa.getRamal());
+            stmt.setString(6, pessoa.getTipo());
     
             stmt.execute();
             stmt.close();
@@ -51,8 +52,9 @@ public class PessoaDAO {
                 String entrada = resultSet.getString("PesDoc");
                 String saida = resultSet.getString("PesTelefone");
                 String pesRamal = resultSet.getString("PesRamal");
+                String pesTipo = resultSet.getString("PesTipo");
     
-                Pessoa pessoa = new Pessoa(cod, motivo, entrada, saida, pesRamal);
+                Pessoa pessoa = new Pessoa(cod, motivo, entrada, saida, pesRamal, pesTipo);
                 pessoas.add(pessoa);
             }
         } catch (SQLException e) {

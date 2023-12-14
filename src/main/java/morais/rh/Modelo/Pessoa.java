@@ -3,15 +3,25 @@ package morais.rh.Modelo;
 public class Pessoa {
 
     int codigo;
-    String nome, documento, telefone, ramal;
+    String nome, documento, telefone, ramal, tipo;
 
-    public Pessoa(int codigo, String nome, String documento, String telefone, String ramal) {
+    public Pessoa(int codigo, String nome, String documento, String telefone, String ramal, String tipo) {
         this.codigo = codigo;
         this.nome = nome;
         this.documento = documento;
         this.telefone = telefone;
         this.ramal = ramal;
+        this.tipo = tipo;
     }
+
+    public String getTipo(){
+        return tipo;
+    }
+
+    public void setTipo(String tipo){
+        this.tipo = tipo;
+    }
+
     public int getCodigo() {
         return codigo;
     }

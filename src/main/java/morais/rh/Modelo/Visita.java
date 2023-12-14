@@ -2,17 +2,17 @@ package morais.rh.Modelo;
 
 public class Visita {
     
-    int cod, TipoCod;
-    String motivo, entrada, saida, pesNome, VeiPlaca;
+    int cod;
+    String motivo, entrada, saida, pesNome, VeiPlaca, Tipo;
     
-    public Visita(int cod, int tipoCod, String motivo, String entrada, String saida, String pesNome, String veiPlaca) {
+    public Visita(int cod, String tipo, String motivo, String entrada, String saida, String pesNome, String veiPlaca) {
         this.cod = cod;
-        TipoCod = tipoCod;
+        this.Tipo = tipo;
         this.motivo = motivo;
         this.entrada = entrada;
         this.saida = saida;
         this.pesNome = pesNome;
-        VeiPlaca = veiPlaca;
+        this.VeiPlaca = veiPlaca;
     }
     
 
@@ -44,12 +44,12 @@ public class Visita {
         this.cod = cod;
     }
 
-    public int getTipoCod() {
-        return TipoCod;
+    public String getTipo() {
+        return Tipo;
     }
 
-    public void setTipoCod(int tipoCod) {
-        TipoCod = tipoCod;
+    public void setTipo(String tipo) {
+        this.Tipo = tipo;
     }
 
     public String getMotivo() {
