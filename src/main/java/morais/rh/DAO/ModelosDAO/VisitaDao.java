@@ -16,7 +16,7 @@ public class VisitaDao {
     private static Connection conexao = controle.getConnection();
 
     public static void adicionaVisita(Visita visita) throws IOException {
-        String sql = "INSERT INTO Visita(VisCod, VisMotivo, VisEntrada, VisSaida, PesNome, Tipo, VeiPlaca) VALUES(?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Visita(VisCod, VisMotivo, VisEntrada, VisSaida, PesNome, VisTipo, VeiPlaca, VisRamal) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
     
         try {
             PreparedStatement stmt = conexao.prepareStatement(sql);
@@ -27,6 +27,7 @@ public class VisitaDao {
             stmt.setString(5, visita.getPesNome());
             stmt.setString(6, visita.getTipo());
             stmt.setString(7, visita.getVeiPlaca());
+            stmt.setString(8, visita.getRamal());
     
             stmt.execute();
             stmt.close();
@@ -53,10 +54,11 @@ public class VisitaDao {
                 String entrada = resultSet.getString("VisEntrada");
                 String saida = resultSet.getString("VisSaida");
                 String pesNome = resultSet.getString("PesNome");
-                String tipo = resultSet.getString("Tipo");
+                String tipo = resultSet.getString("VisTipo");
                 String Vei = resultSet.getString("VeiPlaca");
+                String ramal = resultSet.getString("VisRamal");
     
-                Visita visita = new Visita(cod, tipo, motivo, entrada, saida, pesNome, Vei);
+                Visita visita = new Visita(cod, motivo, entrada, saida, pesNome, Vei, tipo, ramal);
                 visitas.add(visita);
             }
         } catch (SQLException e) {

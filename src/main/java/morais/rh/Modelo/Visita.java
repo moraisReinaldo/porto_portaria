@@ -3,18 +3,19 @@ package morais.rh.Modelo;
 public class Visita {
     
     int cod;
-    String motivo, entrada, saida, pesNome, VeiPlaca, Tipo;
+    String motivo, entrada, saida, pesNome, VeiPlaca, Tipo, ramal;
     
-    public Visita(int cod, String tipo, String motivo, String entrada, String saida, String pesNome, String veiPlaca) {
+    public Visita(int cod, String motivo, String entrada, String saida, String pesNome, String veiPlaca, String tipo,
+            String ramal) {
         this.cod = cod;
-        this.Tipo = tipo;
         this.motivo = motivo;
         this.entrada = entrada;
         this.saida = saida;
         this.pesNome = pesNome;
-        this.VeiPlaca = veiPlaca;
+        VeiPlaca = veiPlaca;
+        Tipo = tipo;
+        this.ramal = ramal;
     }
-    
 
     public String getPesNome() {
         return pesNome;
@@ -74,5 +75,24 @@ public class Visita {
 
     public void setSaida(String saida) {
         this.saida = saida;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Visita [cod=" + cod + ", motivo=" + motivo + ", entrada=" + entrada + ", saida=" + saida + ", pesNome="
+                + pesNome + ", VeiPlaca=" + VeiPlaca + ", Tipo=" + Tipo + "]";
+    }
+
+
+
+    public String getRamal() {
+        return ramal;
+    }
+
+
+
+    public void setRamal(String ramal) {
+        this.ramal = ramal;
     } 
 }

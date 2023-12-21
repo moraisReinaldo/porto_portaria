@@ -150,7 +150,7 @@ public class EntradaPessoas {
         Bregistro.setOnAction((ActionEvent event) ->{
             if(pessoaNova){
                 try {
-                    Pessoa pessNo = new Pessoa(pessoas.size(), Inome.getText(),Idocumento.getText(), Itelefone.getText(), Cramais.getValue(), Ctipo.getValue());
+                    Pessoa pessNo = new Pessoa(pessoas.size(), Inome.getText().trim(),Idocumento.getText().trim(), Itelefone.getText().trim(), Cramais.getValue(), Ctipo.getValue());
                     PessoaDAO.adicionaPessoa(pessNo);
 
                     if(Imotivo.getText() == null){
@@ -160,15 +160,46 @@ public class EntradaPessoas {
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                     String data = currentDate.format(formatter);
                     LocalTime currentTime = LocalTime.now();
-                    String HoraE = currentTime.toString();
+                    DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss.SSSSSSSSS");
+                    String horaCompleta = currentTime.format(timeFormatter);
+        
+                    String HoraE = horaCompleta.substring(0, 8);
 
                     String entrada = data + " - " + HoraE;
 
-                    Visita visita = new Visita(visitas.size(), Ctipo.getValue(), Imotivo.getText(), entrada, "Não informada", Inome.getText(), "A pé");
+                    Visita visita = new Visita(visitas.size(), Imotivo.getText().trim(), entrada, "Não informada", Inome.getText().trim(), "A pé", Ctipo.getValue(), Cramais.getValue());
                     VisitaDao.adicionaVisita(visita);
+                    visitas = VisitaDao.buscarVisitas();
 
                     Bcancela.setText("Finalizar");
-                    Bregistro.setText("Registro realizado!");
+                    Lconfirma.setText("Registro Realizado! Novo registro?");
+
+
+                } catch (IOException e) {   
+                    e.printStackTrace();
+                }
+            }else{
+                try {
+                    if(Imotivo.getText() == null){
+                            Imotivo.setText( "  ");
+                    }
+                    LocalDate currentDate = LocalDate.now();
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                    String data = currentDate.format(formatter);
+                    LocalTime currentTime = LocalTime.now();
+                    DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss.SSSSSSSSS");
+                    String horaCompleta = currentTime.format(timeFormatter);
+        
+                    String HoraE = horaCompleta.substring(0, 8);
+
+                    String entrada = data + " - " + HoraE;
+
+                    Visita visita = new Visita(visitas.size(), Imotivo.getText().trim(), entrada, "Não informada", Inome.getText().trim(), "A pé", Ctipo.getValue(), Cramais.getValue());
+                    VisitaDao.adicionaVisita(visita);
+                    visitas = VisitaDao.buscarVisitas();
+
+                    Bcancela.setText("Finalizar");
+                    Lconfirma.setText("Registro Realizado! Novo registro?");
 
                 } catch (IOException e) {   
                     e.printStackTrace();
