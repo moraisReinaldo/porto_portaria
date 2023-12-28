@@ -50,6 +50,7 @@ public class LoginControle {
                 if(usu.getUsuario().equals(usuario) && usu.getSenha().equals(senha)){
                     try {
                         App.setRoot("TelaInicial");
+                        UsuarioDAO.atualizarAtual(0, usu.getCod());
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

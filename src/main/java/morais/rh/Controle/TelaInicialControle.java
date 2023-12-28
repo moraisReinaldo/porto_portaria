@@ -2,16 +2,25 @@ package morais.rh.Controle;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import morais.rh.App;
+import morais.rh.DAO.ModelosDAO.UsuarioDAO;
 import morais.rh.DAO.ModelosDAO.VisitaDao;
+import morais.rh.Modelo.Usuario;
 import morais.rh.Modelo.Visita;
 
 import java.io.IOException;
@@ -26,6 +35,9 @@ public class TelaInicialControle {
 
     @FXML
     Button Bpeople;
+
+    @FXML
+    Button Btema;
 
     @FXML
     Button Bveiculos;
@@ -45,8 +57,14 @@ public class TelaInicialControle {
     @FXML
     VBox Vregistros;
 
+    @FXML
+    Label LTitulo;
+
     ArrayList<Visita> visitas = VisitaDao.buscarVisitas();
     ArrayList<Visita> possibilidades = new ArrayList<>();
+    ArrayList<Usuario> usuarios = UsuarioDAO.buscarUsuario();
+    Usuario usuAtual = usuarios.get(usuarios.get(0).getAtual());
+    private Scene scene;
     int moradores = 0;
     int veiculos = 0;
     int Nvisita = 0;
@@ -101,6 +119,26 @@ public class TelaInicialControle {
                 App.setRoot("EntradaVeiculos");
             } catch (IOException e) {
             }
+        });
+
+        Btema.setOnAction((ActionEvent event) -> {
+            //Tema 0 = claro
+            //Tema 1 = escuro
+            if(usuAtual.getTema() == 0){
+                usuAtual.setTema(1);
+                UsuarioDAO.atualizarTema(usuAtual.getCod(), 1);
+                //Mudar tema 
+
+            }else{
+                usuAtual.setTema(0);
+                UsuarioDAO.atualizarTema(usuAtual.getCod(), 0);
+                //Mudar tema
+            }
+            aplicarTema(usuAtual);
+        });
+
+        Platform.runLater(() -> {
+            aplicarTema(usuAtual);
         });
     }
 
@@ -236,5 +274,66 @@ public class TelaInicialControle {
         Lmoradores.setText("Moradores: " + moradores);
         Lvisitantes.setText("Visitantes: " + Nvisita);
         Lveiculos.setText("Veiculos: " + veiculos);
+    }
+
+        private void aplicarTema(Usuario usuAtual) {
+        Scene scene = Bpeople.getScene();
+        if (usuAtual.getTema() == 1) {
+            // Configuração de cores para o tema escuro
+            scene.getRoot().setStyle("-fx-background-color: #2E2E2E;");
+            aplicarEstiloEscuro(Bpeople);
+            aplicarEstiloEscuro(Btema);
+            aplicarEstiloEscuro(Bveiculos);
+            aplicarEstiloEscuro(Lmoradores);
+            aplicarEstiloEscuro(Lveiculos);
+            aplicarEstiloEscuro(Lvisitantes);
+            aplicarEstiloEscuro(LTitulo);
+            aplicarEstiloEscuro(Tbusca);
+            aplicarEstiloEscuro(Vregistros);
+        } else {
+            // Configuração de cores para o tema claro (pode ajustar conforme necessário)
+            scene.getRoot().setStyle("-fx-background-color: #FFFFFF;");
+            resetarEstilo(Bpeople);
+            resetarEstilo(Btema);
+            resetarEstilo(Bveiculos);
+            resetarEstilo(Lmoradores);
+            resetarEstilo(Lveiculos);
+            resetarEstilo(Lvisitantes);
+            resetarEstilo(LTitulo);
+            resetarEstilo(Tbusca);
+            resetarEstilo(Vregistros);
+        }
+    }
+
+    private void aplicarEstiloEscuro(Button button) {
+        button.setStyle("-fx-background-color: #424242; -fx-text-fill: #FFFFFF;");
+    }
+
+    private void resetarEstilo(Button button) {
+        button.setStyle(""); // Resetar para os estilos padrão
+    }
+
+    private void resetarEstilo(Label label) {
+        label.setTextFill(Color.BLACK); // Resetar para a cor padrão
+    }
+    
+    private void resetarEstilo(TextField textField) {
+        textField.setStyle(""); // Resetar para os estilos padrão
+    }
+    
+    private void resetarEstilo(VBox vbox) {
+        vbox.setBackground(null); // Resetar para o plano de fundo padrão
+    }
+
+    private void aplicarEstiloEscuro(Label label) {
+        label.setTextFill(Color.WHITE);
+    }
+
+    private void aplicarEstiloEscuro(TextField textField) {
+        textField.setStyle("-fx-background-color: #424242; -fx-text-fill: #FFFFFF;");
+    }
+
+    private void aplicarEstiloEscuro(VBox vbox) {
+        vbox.setBackground(new Background(new BackgroundFill(Color.web("#2E2E2E"), CornerRadii.EMPTY, javafx.geometry.Insets.EMPTY)));
     }
 }

@@ -16,7 +16,7 @@ public class UsuarioDAO {
     private static Connection conexao = controle.getConnection();
 
     public static void adicionaUsuario(Usuario usuario) throws IOException {
-        String sql = "INSERT INTO Usuario(UsuCod,UsuSenha, UsuNome) VALUES(?,?, ?)";
+        String sql = "INSERT INTO Usuario(UsuCod,UsuSenha, UsuNome, UsuAtual, UsuTema) VALUES(?,?,?,0,0)";
     
         try {
             PreparedStatement stmt = conexao.prepareStatement(sql);
@@ -47,8 +47,10 @@ public class UsuarioDAO {
                 String senha = resultSet.getString("UsuSenha");
                 String nome = resultSet.getString("UsuNome");
                 int cod = resultSet.getInt("UsuCod");
+                int atual = resultSet.getInt("UsuAtual");
+                int tema = resultSet.getInt("UsuTema");
     
-                Usuario usuario = new Usuario(nome, senha,cod);
+                Usuario usuario = new Usuario(nome, senha, cod, atual, tema);
                 usuarios.add(usuario);
             }
         } catch (SQLException e) {
@@ -78,6 +80,52 @@ public class UsuarioDAO {
             e.printStackTrace();
             throw new RuntimeException("Erro ao apagar usuario no banco de dados: " + e.getMessage());
         }
+        }
+    }
+
+    public static void atualizarTema(int cod, int tema) {
+        String sql = "UPDATE Usuario SET UsuTema = ? WHERE UsuCod = ?";
+        
+        try {
+            PreparedStatement stmt = conexao.prepareStatement(sql);
+            stmt.setInt(1, tema);
+            stmt.setInt(2, cod);
+        
+            int linhasAfetadas = stmt.executeUpdate();
+    
+            if (linhasAfetadas > 0) {
+                System.out.println("Tema atualizado com sucesso.");
+            } else {
+                System.out.println("Nenhuma tema foi atualizado.");
+            }
+            
+            stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erro ao atualizar tema no banco de dados: " + e.getMessage());
+        }
+    }
+
+    public static void atualizarAtual(int cod, int novoA) {
+        String sql = "UPDATE Usuario SET UsuAtual = ? WHERE UsuCod = ?";
+        
+        try {
+            PreparedStatement stmt = conexao.prepareStatement(sql);
+            stmt.setInt(1, novoA);
+            stmt.setInt(2, cod);
+        
+            int linhasAfetadas = stmt.executeUpdate();
+    
+            if (linhasAfetadas > 0) {
+                System.out.println("Atual atualizado com sucesso.");
+            } else {
+                System.out.println("Nenhum dado foi atualizado.");
+            }
+            
+            stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erro ao atualizar atual no banco de dados: " + e.getMessage());
         }
     }
 }
