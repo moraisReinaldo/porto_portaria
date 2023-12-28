@@ -25,9 +25,6 @@ import java.util.ArrayList;
 public class TelaInicialControle {
 
     @FXML
-    Button Bconf;
-
-    @FXML
     Button Bpeople;
 
     @FXML
@@ -56,21 +53,7 @@ public class TelaInicialControle {
 
     public void initialize() {
 
-        for (Visita visita : visitas) {
-            if (visita.getTipo().equals("Morador") && visita.getSaida().equals("Não informada")) {
-                moradores += 1;
-            }
-            if (!visita.getVeiPlaca().equals("A pé") && visita.getSaida().equals("Não informada")) {
-                veiculos += 1;
-            }
-            if (!visita.getTipo().equals("Morador") && visita.getSaida().equals("Não informada")) {
-                Nvisita += 1;
-            }
-        }
-
-        Lmoradores.setText("Moradores: " + moradores);
-        Lvisitantes.setText("Visitantes: " + Nvisita);
-        Lveiculos.setText("Veiculos: " + veiculos);
+        MuL(visitas);
 
         for (Visita vis : visitas) {
             if (vis.getSaida().equals("Não informada")) {
@@ -106,13 +89,6 @@ public class TelaInicialControle {
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
 
-        Bconf.setOnAction((ActionEvent event) -> {
-            try {
-                App.setRoot("Configuracao");
-            } catch (IOException e) {
-            }
-        });
-
         Bpeople.setOnAction((ActionEvent event) -> {
             try {
                 App.setRoot("EntradaPessoas");
@@ -134,37 +110,50 @@ public class TelaInicialControle {
         for (Visita visita : possibilidades) {
             HBox pessoa = new HBox();
             pessoa.setSpacing(20);
+            pessoa.setMinWidth(100);
+            pessoa.setMaxWidth(100);
 
             pessoa.setAlignment(Pos.CENTER); // Centraliza verticalmente
 
             Label Nome = new Label();
-            Nome.setText(visita.getPesNome() + "\n" + visita.getTipo());
-            Nome.setMinWidth(100); // Define a largura mínima
+            Nome.setText(visita.getPesNome() + " " + visita.getTipo());
+            Nome.setMinWidth(100);
+            Nome.setWrapText(true);
+            Nome.setMaxWidth(100); 
+            Nome.setAlignment(Pos.CENTER);
             pessoa.getChildren().add(Nome);
 
             Label entrada = new Label();
             entrada.setText(visita.getEntrada());
+            entrada.setMinWidth(70);
             entrada.setWrapText(true);
-            entrada.setMaxWidth(75);
-            entrada.wrapTextProperty(); // Define a largura mínima
+            entrada.setMaxWidth(70);
+            entrada.wrapTextProperty();
+            entrada.setAlignment(Pos.CENTER);
             pessoa.getChildren().add(entrada);
-
-
-            
 
             Label ramal = new Label();
             ramal.setText(visita.getRamal());
-            ramal.setMinWidth(20); // Define a largura mínima
+            ramal.setMinWidth(40);
+            ramal.setWrapText(true);
+            ramal.setMaxWidth(40); 
+            ramal.setAlignment(Pos.CENTER);
             pessoa.getChildren().add(ramal);
 
             Label placa = new Label();
             placa.setText(visita.getVeiPlaca());
-            placa.setMinWidth(20); // Define a largura mínima
+            placa.setMinWidth(30);
+            placa.setWrapText(true);
+            placa.setMaxWidth(30); 
+            placa.setAlignment(Pos.CENTER);
             pessoa.getChildren().add(placa);
 
             Label timer = new Label();
             timer.setText(calcularTempoPassado(visita.getEntrada()));
-            timer.setMinWidth(50); // Define a largura mínima
+            timer.setMinWidth(70);
+            timer.setWrapText(true);
+            timer.setMaxWidth(70); 
+            timer.setAlignment(Pos.CENTER);
             pessoa.getChildren().add(timer);
 
             LocalDate currentDate = LocalDate.now();
@@ -180,7 +169,9 @@ public class TelaInicialControle {
 
             Button finaliza = new Button();
             finaliza.setText("Registrar saída");
-            finaliza.setMinWidth(100); // Define a largura mínima
+            finaliza.setMinWidth(100);
+            finaliza.setMaxWidth(100); 
+            finaliza.setAlignment(Pos.CENTER);
             finaliza.setOnAction((ActionEvent event) -> {
                 VisitaDao.atualizarVisitaData(visita.getCod(), hSaiada);
                 visitas = VisitaDao.buscarVisitas();
@@ -190,6 +181,7 @@ public class TelaInicialControle {
                         possibilidades.add(vis);
                     }
                 }
+                MuL(visitas);
             });
             pessoa.getChildren().add(finaliza);
 
@@ -222,5 +214,27 @@ public class TelaInicialControle {
         segundos = segundos % 60;
 
         return String.format("%02d:%02d:%02d", horas, minutos, segundos);
+    }
+
+    public void MuL(ArrayList<Visita> visitas){
+        moradores = 0;
+        veiculos = 0;
+        Nvisita = 0;
+        
+        for (Visita visita : visitas) {
+            if (visita.getTipo().equals("Morador") && visita.getSaida().equals("Não informada")) {
+                moradores += 1;
+            }
+            if (!visita.getVeiPlaca().equals("A pé") && visita.getSaida().equals("Não informada")) {
+                veiculos += 1;
+            }
+            if (!visita.getTipo().equals("Morador") && visita.getSaida().equals("Não informada")) {
+                Nvisita += 1;
+            }
+        }
+
+        Lmoradores.setText("Moradores: " + moradores);
+        Lvisitantes.setText("Visitantes: " + Nvisita);
+        Lveiculos.setText("Veiculos: " + veiculos);
     }
 }

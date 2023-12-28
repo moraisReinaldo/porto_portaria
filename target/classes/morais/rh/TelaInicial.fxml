@@ -38,11 +38,6 @@
                   <Insets left="10.0" right="10.0" />
                </padding>
             </Label>
-            <Button fx:id="Bconf" alignment="CENTER" mnemonicParsing="false" text="Configurações">
-               <HBox.margin>
-                  <Insets left="10.0" right="10.0" />
-               </HBox.margin>
-            </Button>
          </children>
          <BorderPane.margin>
             <Insets />
@@ -80,21 +75,17 @@
         <content>
           <AnchorPane prefHeight="446.0" prefWidth="644.0">
                <children>
-                  <HBox alignment="CENTER" prefHeight="36.0" prefWidth="682.0" spacing="20.0">
+                  <HBox alignment="CENTER" maxWidth="680.0" minWidth="680.0" prefHeight="35.0" prefWidth="680.0" spacing="20.0">
                      <children>
-                        <Label minWidth="100.0" text="Descrição " />
-                        <Label minWidth="75.0" text="Entrada" />
-                        <Label minWidth="20.0" text="Ramal" />
-                        <Label minWidth="20.0" text="Placa" />
-                        <Label minWidth="50.0" text="Permanência" />
-                        <Label minWidth="100.0" prefWidth="107.0" text="Confirmar Saida" />
+                        <Label maxWidth="100.0" minWidth="100.0" text="Descrição " />
+                        <Label maxWidth="70.0" minWidth="70.0" text="Entrada" />
+                        <Label maxWidth="40.0" minWidth="40.0" text="Ramal" />
+                        <Label maxWidth="30.0" minWidth="30.0" text="Placa" />
+                        <Label maxWidth="70.0" minWidth="70.0" text="Permanência" />
+                        <Label maxWidth="100.0" minWidth="100.0" text="Confirmar Saida" />
                      </children>
                   </HBox>
-                  <VBox fx:id="Vregistros" alignment="TOP_CENTER" layoutX="-2.0" layoutY="31.0" maxHeight="1.7976931348623157E308" prefHeight="414.0" prefWidth="683.0" spacing="10.0">
-                     <padding>
-                        <Insets left="10.0" right="10.0" top="10.0" />
-                     </padding>
-                  </VBox>
+                  <VBox fx:id="Vregistros" alignment="TOP_CENTER" layoutX="-2.0" layoutY="31.0" maxHeight="1.7976931348623157E308" prefWidth="680.0" spacing="10.0" />
                </children>
             </AnchorPane>
         </content>

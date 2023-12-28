@@ -64,12 +64,8 @@ public class EntradaPessoas {
     ArrayList<Tipo> tipos = TipoDAO.buscarUsuario();
     ArrayList<Pessoa> pessoas =  PessoaDAO.buscarPessoa();
     ArrayList<Visita> visitas = VisitaDao.buscarVisitas();
-    Boolean pessoaNova = true;
 
     public void initialize(){
-
-        
-
 
         ObservableList<String> tiposO = FXCollections.observableArrayList();
         for(Tipo tipo : tipos){
@@ -102,7 +98,6 @@ public class EntradaPessoas {
                                     Cramais.setValue(pessoa.getRamal());
                                     Idocumento.setText(pessoa.getDocumento());
                                     Ctipo.setValue(pessoa.getTipo());
-                                    pessoaNova = false;
                                     Lconfirma.setText("Confirmar os dados de cadastro:");
                                 }
                             }
@@ -127,7 +122,6 @@ public class EntradaPessoas {
                         Cramais.setValue(pessoa.getRamal());
                         Idocumento.setText(pessoa.getDocumento());
                         Ctipo.setValue(pessoa.getTipo());
-                        pessoaNova = false;
                         Lconfirma.setText("Confirmar os dados de cadastro:");
                     }
                 }
@@ -148,10 +142,12 @@ public class EntradaPessoas {
 
 
         Bregistro.setOnAction((ActionEvent event) ->{
-            if(pessoaNova){
+            if(temNoBancoP(Inome.getText()) == false){
                 try {
+                    
                     Pessoa pessNo = new Pessoa(pessoas.size(), Inome.getText().trim(),Idocumento.getText().trim(), Itelefone.getText().trim(), Cramais.getValue(), Ctipo.getValue());
                     PessoaDAO.adicionaPessoa(pessNo);
+                    pessoas = PessoaDAO.buscarPessoa();
 
                     if(Imotivo.getText() == null){
                             Imotivo.setText( "  ");
@@ -172,7 +168,7 @@ public class EntradaPessoas {
                     visitas = VisitaDao.buscarVisitas();
 
                     Bcancela.setText("Finalizar");
-                    Lconfirma.setText("Registro Realizado! Novo registro?");
+                    Lconfirma.setText("Registro Realizado!");
 
 
                 } catch (IOException e) {   
@@ -199,7 +195,7 @@ public class EntradaPessoas {
                     visitas = VisitaDao.buscarVisitas();
 
                     Bcancela.setText("Finalizar");
-                    Lconfirma.setText("Registro Realizado! Novo registro?");
+                    Lconfirma.setText("Registro Realizado!");
 
                 } catch (IOException e) {   
                     e.printStackTrace();
@@ -215,6 +211,18 @@ public class EntradaPessoas {
             }
         });
         
+    }
+
+    public Boolean temNoBancoP(String Nome){
+        ArrayList<Pessoa> pessoasBanco = PessoaDAO.buscarPessoa();
+        Boolean tem = false;
+        for(Pessoa p : pessoasBanco){
+            if(p.getNome().toLowerCase().trim().equals(Nome.toLowerCase().trim())){
+                tem = true;
+            }
+        }
+
+        return tem;
     }
     
 }
