@@ -48,7 +48,7 @@
                   <Font size="15.0" />
                </font>
             </TextField>
-            <Label fx:id="Lconfirma" text="Cadastrar uma nova visita:">
+            <Label fx:id="Lconfirma" text="Cadastrar uma nova pessoa:">
                <VBox.margin>
                   <Insets top="100.0" />
                </VBox.margin>

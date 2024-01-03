@@ -14,6 +14,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import morais.rh.App;
+import morais.rh.DAO.ControleBanco;
+import morais.rh.DAO.ModelosDAO.AlteraDAO;
 import morais.rh.DAO.ModelosDAO.UsuarioDAO;
 import morais.rh.DAO.ModelosDAO.VisitaDao;
 import morais.rh.Modelo.Usuario;
@@ -134,6 +136,9 @@ public class TelaInicialControle {
 
         Platform.runLater(() -> {
             aplicarTema(usuAtual);
+            if(AlteraDAO.buscarStatus() != 0){
+                ControleBanco.AtualizarB();
+            }
         });
     }
 

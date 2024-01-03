@@ -8,12 +8,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import morais.rh.DAO.ControleBanco;
+import morais.rh.DAO.ControleBanco2;
 import morais.rh.Modelo.Visita;
 
 public class VisitaDao {
 
     static ControleBanco controle = new ControleBanco();
     private static Connection conexao = controle.getConnection();
+
+    static ControleBanco2 controle2 = new ControleBanco2();
+    private static Connection conexao2 = controle2.getConnection();
 
     public static void adicionaVisita(Visita visita) throws IOException {
         String sql = "INSERT INTO Visita(VisCod, VisMotivo, VisEntrada, VisSaida, PesNome, VisTipo, VeiPlaca, VisRamal) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
@@ -31,6 +35,42 @@ public class VisitaDao {
     
             stmt.execute();
             stmt.close();
+
+            PreparedStatement stmt2 = conexao2.prepareStatement(sql);
+            stmt2.setInt(1, visita.getCod());
+            stmt2.setString(2, visita.getMotivo());
+            stmt2.setString(3, visita.getEntrada());
+            stmt2.setString(4, visita.getSaida());
+            stmt2.setString(5, visita.getPesNome());
+            stmt2.setString(6, visita.getTipo());
+            stmt2.setString(7, visita.getVeiPlaca());
+            stmt2.setString(8, visita.getRamal());
+    
+            stmt2.execute();
+            stmt2.close();
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erro ao adicionar visita no banco de dados: " + e.getMessage());
+        }
+    }
+
+        public static void adicionaVisita2(Visita visita) throws IOException {
+        String sql = "INSERT INTO Visita(VisCod, VisMotivo, VisEntrada, VisSaida, PesNome, VisTipo, VeiPlaca, VisRamal) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+    
+        try {
+            PreparedStatement stmt2 = conexao2.prepareStatement(sql);
+            stmt2.setInt(1, visita.getCod());
+            stmt2.setString(2, visita.getMotivo());
+            stmt2.setString(3, visita.getEntrada());
+            stmt2.setString(4, visita.getSaida());
+            stmt2.setString(5, visita.getPesNome());
+            stmt2.setString(6, visita.getTipo());
+            stmt2.setString(7, visita.getVeiPlaca());
+            stmt2.setString(8, visita.getRamal());
+    
+            stmt2.execute();
+            stmt2.close();
             
         } catch (SQLException e) {
             e.printStackTrace();
@@ -45,6 +85,37 @@ public class VisitaDao {
         try {
             String consulta = "SELECT * FROM Visita";
             PreparedStatement preparedStatement = conexao.prepareStatement(consulta);
+            resultSet = preparedStatement.executeQuery();
+    
+            while (resultSet.next()) {
+
+                int cod = resultSet.getInt("VisCod");
+                String motivo = resultSet.getString("VisMotivo");
+                String entrada = resultSet.getString("VisEntrada");
+                String saida = resultSet.getString("VisSaida");
+                String pesNome = resultSet.getString("PesNome");
+                String tipo = resultSet.getString("VisTipo");
+                String Vei = resultSet.getString("VeiPlaca");
+                String ramal = resultSet.getString("VisRamal");
+    
+                Visita visita = new Visita(cod, motivo, entrada, saida, pesNome, Vei, tipo, ramal);
+                visitas.add(visita);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erro ao buscar visitas no banco de dados: " + e.getMessage());
+        }
+    
+        return visitas;
+    }
+
+    public static ArrayList<Visita> buscarVisitas2() {
+        ResultSet resultSet = null;
+        ArrayList<Visita> visitas = new ArrayList<>();
+    
+        try {
+            String consulta = "SELECT * FROM Visita";
+            PreparedStatement preparedStatement = conexao2.prepareStatement(consulta);
             resultSet = preparedStatement.executeQuery();
     
             while (resultSet.next()) {
@@ -109,6 +180,22 @@ public class VisitaDao {
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("Erro ao atualizar visita no banco de dados: " + e.getMessage());
+        }
+    }
+
+    public static void UpVisitas(){
+        ArrayList<Visita> usu1 = buscarVisitas();
+        ArrayList<Visita> usu2 = buscarVisitas2();
+        
+        for(Visita usu : usu2){
+            apagarVisita(usu.getCod());
+        }
+        for(Visita usu : usu1){
+            try {
+                adicionaVisita2(usu);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

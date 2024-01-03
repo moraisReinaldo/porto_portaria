@@ -81,7 +81,7 @@ public class EntradaPessoas {
     @FXML
     Label Lramal;
 
-    ArrayList<Tipo> tipos = TipoDAO.buscarUsuario();
+    ArrayList<Tipo> tipos = TipoDAO.buscarTipo1();
     ArrayList<Pessoa> pessoas =  PessoaDAO.buscarPessoa();
     ArrayList<Visita> visitas = VisitaDao.buscarVisitas();
     ArrayList<Usuario> usuarios = UsuarioDAO.buscarUsuario();
@@ -166,8 +166,15 @@ public class EntradaPessoas {
         Bregistro.setOnAction((ActionEvent event) ->{
             if(temNoBancoP(Inome.getText()) == false){
                 try {
+
+                    int cod;
+                    if(pessoas.size() == 0){
+                        cod = 0;
+                    }else{
+                        cod = pessoas.get(pessoas.size()-1).getCodigo() + 1;
+                    }
                     
-                    Pessoa pessNo = new Pessoa(pessoas.size(), Inome.getText().trim(),Idocumento.getText().trim(), Itelefone.getText().trim(), Cramais.getValue(), Ctipo.getValue());
+                    Pessoa pessNo = new Pessoa(cod, Inome.getText().trim(),Idocumento.getText().trim(), Itelefone.getText().trim(), Cramais.getValue(), Ctipo.getValue());
                     PessoaDAO.adicionaPessoa(pessNo);
                     pessoas = PessoaDAO.buscarPessoa();
 
@@ -185,7 +192,14 @@ public class EntradaPessoas {
 
                     String entrada = data + " - " + HoraE;
 
-                    Visita visita = new Visita(visitas.size(), Imotivo.getText().trim(), entrada, "Não informada", Inome.getText().trim(), "A pé", Ctipo.getValue(), Cramais.getValue());
+                    int codV;
+                    if(visitas.size() == 0){
+                        codV = 0;
+                    }else{
+                        codV = visitas.get(visitas.size()-1).getCod() + 1;
+                    }
+
+                    Visita visita = new Visita(codV, Imotivo.getText().trim(), entrada, "Não informada", Inome.getText().trim(), "A pé", Ctipo.getValue(), Cramais.getValue());
                     VisitaDao.adicionaVisita(visita);
                     visitas = VisitaDao.buscarVisitas();
 
@@ -212,7 +226,14 @@ public class EntradaPessoas {
 
                     String entrada = data + " - " + HoraE;
 
-                    Visita visita = new Visita(visitas.size(), Imotivo.getText().trim(), entrada, "Não informada", Inome.getText().trim(), "A pé", Ctipo.getValue(), Cramais.getValue());
+                    int codV;
+                    if(visitas.size() == 0){
+                        codV = 0;
+                    }else{
+                        codV = visitas.get(visitas.size()-1).getCod() + 1;
+                    }
+
+                    Visita visita = new Visita(codV, Imotivo.getText().trim(), entrada, "Não informada", Inome.getText().trim(), "A pé", Ctipo.getValue(), Cramais.getValue());
                     VisitaDao.adicionaVisita(visita);
                     visitas = VisitaDao.buscarVisitas();
 

@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -120,7 +122,7 @@ public class EntradaVeiculos {
     @FXML 
     Label Lenvio;
 
-    ArrayList<Tipo> tipos = TipoDAO.buscarUsuario();
+    ArrayList<Tipo> tipos = TipoDAO.buscarTipo1();
     ArrayList<Pessoa> pessoas =  PessoaDAO.buscarPessoa();
     ArrayList<Visita> visitas = VisitaDao.buscarVisitas();
     ArrayList<Veiculo> veiculos = VeiculoDAO.buscarVeiculo();
@@ -258,6 +260,7 @@ public class EntradaVeiculos {
         });
 
         Bregistro.setOnAction((ActionEvent event) ->{
+
             if(temNoBancoV(Iplaca.getText()) == false){
                 Veiculo vei = new Veiculo(Iplaca.getText().toUpperCase(), Icor.getText(), Imodelo.getText(), Cramal.getValue());
                 try {
@@ -266,42 +269,52 @@ public class EntradaVeiculos {
                     e.printStackTrace();
                 }
             }
+            if(verificaPlaca(Iplaca.getText().toUpperCase().trim()) && Iplaca.getText().length() == 7){       
+                for(Pessoa peo : pessoasVei){
+                    if(temNoBancoP(peo.getNome()) == false){
+                        peo.setCodigo(pessoas.size());
+                        try {
+                            PessoaDAO.adicionaPessoa(peo);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        pessoas.add(peo);
+                    }
 
-            for(Pessoa peo : pessoasVei){
-                if(temNoBancoP(peo.getNome()) == false){
-                    peo.setCodigo(pessoas.size());
+                    if(Imotivo.getText() == null){
+                            Imotivo.setText("  ");
+                    }
+
+                    LocalDate currentDate = LocalDate.now();
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                    String data = currentDate.format(formatter);
+                    LocalTime currentTime = LocalTime.now();
+                    DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss.SSSSSSSSS");
+                    String horaCompleta = currentTime.format(timeFormatter);
+                    String HoraE = horaCompleta.substring(0, 8);
+                    String entrada = data + " - " + HoraE;
+
+                    int codV;
+                    if(visitas.size() == 0){
+                        codV = 0;
+                    }else{
+                        codV = visitas.get(visitas.size()-1).getCod() + 1;
+                    }
+
+                    Visita visita = new Visita(codV, Imotivo.getText().trim(), entrada, "Não informada", peo.getNome(), Iplaca.getText().toUpperCase(), peo.getTipo(), Cramal.getValue());
                     try {
-                        PessoaDAO.adicionaPessoa(peo);
+                        VisitaDao.adicionaVisita(visita);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    pessoas.add(peo);
+                    visitas.add(visita);
+
+                    Bcancela.setText("Finalizar");
+                    Bregistro.setText("Registro Realizado!");
                 }
-
-                if(Imotivo.getText() == null){
-                        Imotivo.setText( "  ");
-                }
-                LocalDate currentDate = LocalDate.now();
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                String data = currentDate.format(formatter);
-                LocalTime currentTime = LocalTime.now();
-                DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss.SSSSSSSSS");
-                String horaCompleta = currentTime.format(timeFormatter);
-        
-                String HoraE = horaCompleta.substring(0, 8);
-
-                String entrada = data + " - " + HoraE;
-
-                Visita visita = new Visita(visitas.size(), Imotivo.getText().trim(), entrada, "Não informada", peo.getNome(), Iplaca.getText().toUpperCase(), peo.getTipo(), Cramal.getValue());
-                try {
-                    VisitaDao.adicionaVisita(visita);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                visitas.add(visita);
-
-                Bcancela.setText("Finalizar");
-                Bregistro.setText("Registro Realizado!");
+            }else{
+                Lplaca.setText("Placa fora dos padrões!");
+                Lplaca.setStyle("-fx-text-fill: #FF0000;");
             }
 
         });
@@ -473,5 +486,19 @@ public class EntradaVeiculos {
     private void resetarEstilo(TextArea textArea) {
         textArea.setStyle("-fx-control-inner-background: #FFFFFF;"); // Resetar a cor de fundo interna para a cor padrão
     }
-    
+
+    public static boolean verificaPlaca(String placa) {
+        // Padrão para AAA0000 ou AAA0A00
+        String regex = "^[A-Z]{3}[0-9]{4}$|^[A-Z]{3}[0-9]{1}[A-Z]{1}[0-9]{2}$";
+        
+        // Compilar o padrão
+        Pattern pattern = Pattern.compile(regex);
+
+        // Criar um objeto Matcher
+        Matcher matcher = pattern.matcher(placa);
+
+        // Verificar se a placa corresponde ao padrão
+        return matcher.matches();
+    }
+
 }

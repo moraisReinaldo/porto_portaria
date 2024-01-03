@@ -5,10 +5,11 @@ morais\rh\DAO\ControleBanco.class
 morais\rh\DAO\ModelosDAO\TipoDAO.class
 morais\rh\Modelo\Tipo.class
 morais\rh\Controle\EntradaVeiculos.class
+morais\rh\DAO\ControleBanco2.class
 morais\rh\Modelo\Veiculo.class
 module-info.class
+morais\rh\Main.class
 morais\rh\Controle\LoginControle.class
-morais\rh\Controle\ConfiguracaoControle.class
 morais\rh\Controle\EntradaPessoas.class
 morais\rh\Modelo\Pessoa.class
 morais\rh\Controle\TelaInicialControle.class

@@ -8,12 +8,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import morais.rh.DAO.ControleBanco;
+import morais.rh.DAO.ControleBanco2;
 import morais.rh.Modelo.Pessoa;
 
 public class PessoaDAO {
 
     static ControleBanco controle = new ControleBanco();
     private static Connection conexao = controle.getConnection();
+
+    static ControleBanco2 controle2 = new ControleBanco2();
+    private static Connection conexao2 = controle2.getConnection();
 
     public static void adicionaPessoa(Pessoa pessoa) throws IOException {
         String sql = "INSERT INTO Pessoa(PesCodigo, PesNome, PesDoc, PesTelefone, PesRamal, PesTipo) VALUES(?, ?, ?, ?, ?,?)";
@@ -29,7 +33,39 @@ public class PessoaDAO {
     
             stmt.execute();
             stmt.close();
+
+            PreparedStatement stmt2 = conexao2.prepareStatement(sql);
+            stmt2.setInt(1, pessoa.getCodigo());
+            stmt2.setString(2, pessoa.getNome());
+            stmt2.setString(3, pessoa.getDocumento());
+            stmt2.setString(4, pessoa.getTelefone());
+            stmt2.setString(5, pessoa.getRamal());
+            stmt2.setString(6, pessoa.getTipo());
+    
+            stmt2.execute();
+            stmt2.close();
             
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erro ao adicionar visita no banco de dados: " + e.getMessage());
+        }
+    }
+
+    public static void adicionaPessoa1(Pessoa pessoa) throws IOException {
+        String sql = "INSERT INTO Pessoa(PesCodigo, PesNome, PesDoc, PesTelefone, PesRamal, PesTipo) VALUES(?, ?, ?, ?, ?,?)";
+    
+        try {
+            PreparedStatement stmt = conexao.prepareStatement(sql);
+            stmt.setInt(1, pessoa.getCodigo());
+            stmt.setString(2, pessoa.getNome());
+            stmt.setString(3, pessoa.getDocumento());
+            stmt.setString(4, pessoa.getTelefone());
+            stmt.setString(5, pessoa.getRamal());
+            stmt.setString(6, pessoa.getTipo());
+    
+            stmt.execute();
+            stmt.close();
+        
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("Erro ao adicionar visita no banco de dados: " + e.getMessage());
@@ -43,6 +79,35 @@ public class PessoaDAO {
         try {
             String consulta = "SELECT * FROM Pessoa";
             PreparedStatement preparedStatement = conexao.prepareStatement(consulta);
+            resultSet = preparedStatement.executeQuery();
+    
+            while (resultSet.next()) {
+
+                int cod = resultSet.getInt("PesCodigo");
+                String motivo = resultSet.getString("PesNome");
+                String entrada = resultSet.getString("PesDoc");
+                String saida = resultSet.getString("PesTelefone");
+                String pesRamal = resultSet.getString("PesRamal");
+                String pesTipo = resultSet.getString("PesTipo");
+    
+                Pessoa pessoa = new Pessoa(cod, motivo, entrada, saida, pesRamal, pesTipo);
+                pessoas.add(pessoa);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erro ao buscar pessoas no banco de dados: " + e.getMessage());
+        }
+    
+        return pessoas;
+    }
+
+    public static ArrayList<Pessoa> buscarPessoa2() {
+        ResultSet resultSet = null;
+        ArrayList<Pessoa> pessoas = new ArrayList<>();
+    
+        try {
+            String consulta = "SELECT * FROM Pessoa";
+            PreparedStatement preparedStatement = conexao2.prepareStatement(consulta);
             resultSet = preparedStatement.executeQuery();
     
             while (resultSet.next()) {
@@ -82,6 +147,22 @@ public class PessoaDAO {
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("Erro ao apagar pessoa no banco de dados: " + e.getMessage());
+        }
+    }
+
+    public static void UpPessoa(){
+        ArrayList<Pessoa> pessoas1 = buscarPessoa();
+        ArrayList<Pessoa> pessoas2 = buscarPessoa2();
+        
+        for(Pessoa pep : pessoas1){
+            apagarPessoa(pep.getCodigo());
+        }
+        for(Pessoa pep: pessoas2){
+            try {
+                adicionaPessoa1(pep);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

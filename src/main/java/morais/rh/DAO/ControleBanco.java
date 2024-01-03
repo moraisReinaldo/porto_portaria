@@ -4,6 +4,12 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import morais.rh.DAO.ModelosDAO.AlteraDAO;
+import morais.rh.DAO.ModelosDAO.PessoaDAO;
+import morais.rh.DAO.ModelosDAO.TipoDAO;
+import morais.rh.DAO.ModelosDAO.UsuarioDAO;
+import morais.rh.DAO.ModelosDAO.VeiculoDAO;
+
 public class ControleBanco {
 
     private static final String DB_URL = "jdbc:mysql://localhost:3306/porto";
@@ -51,5 +57,14 @@ public class ControleBanco {
     // Getter method to retrieve the connection
     public Connection getConnection() {
         return conexao;
+    }
+
+    public static void AtualizarB(){
+        
+        TipoDAO.UpTipo();
+        PessoaDAO.UpPessoa();
+        UsuarioDAO.UpUsuario();
+        VeiculoDAO.UpVeiculo();
+        AlteraDAO.atualizarSitua(0);
     }
 }

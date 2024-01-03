@@ -8,12 +8,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import morais.rh.DAO.ControleBanco;
+import morais.rh.DAO.ControleBanco2;
 import morais.rh.Modelo.Usuario;
 
 public class UsuarioDAO {
 
     static ControleBanco controle = new ControleBanco();
     private static Connection conexao = controle.getConnection();
+
+    static ControleBanco2 controle2 = new ControleBanco2();
+    private static Connection conexao2 = controle2.getConnection();
 
     public static void adicionaUsuario(Usuario usuario) throws IOException {
         String sql = "INSERT INTO Usuario(UsuCod,UsuSenha, UsuNome, UsuAtual, UsuTema) VALUES(?,?,?,0,0)";
@@ -40,6 +44,34 @@ public class UsuarioDAO {
         try {
             String consulta = "SELECT * FROM Usuario";
             PreparedStatement preparedStatement = conexao.prepareStatement(consulta);
+            resultSet = preparedStatement.executeQuery();
+    
+            while (resultSet.next()) {
+
+                String senha = resultSet.getString("UsuSenha");
+                String nome = resultSet.getString("UsuNome");
+                int cod = resultSet.getInt("UsuCod");
+                int atual = resultSet.getInt("UsuAtual");
+                int tema = resultSet.getInt("UsuTema");
+    
+                Usuario usuario = new Usuario(nome, senha, cod, atual, tema);
+                usuarios.add(usuario);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erro ao buscar usuarios no banco de dados: " + e.getMessage());
+        }
+    
+        return usuarios;
+    }
+
+    public static ArrayList<Usuario> buscarUsuario2() {
+        ResultSet resultSet = null;
+        ArrayList<Usuario> usuarios = new ArrayList<>();
+    
+        try {
+            String consulta = "SELECT * FROM Usuario";
+            PreparedStatement preparedStatement = conexao2.prepareStatement(consulta);
             resultSet = preparedStatement.executeQuery();
     
             while (resultSet.next()) {
@@ -126,6 +158,22 @@ public class UsuarioDAO {
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("Erro ao atualizar atual no banco de dados: " + e.getMessage());
+        }
+    }
+
+    public static void UpUsuario(){
+        ArrayList<Usuario> usu1 = buscarUsuario();
+        ArrayList<Usuario> usu2 = buscarUsuario2();
+        
+        for(Usuario usu : usu1){
+            apagarUsuario(usu.getCod());
+        }
+        for(Usuario usu : usu2){
+            try {
+                adicionaUsuario(usu);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
