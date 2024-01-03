@@ -6,10 +6,12 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
@@ -18,12 +20,15 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 import morais.rh.App;
 import morais.rh.DAO.ModelosDAO.PessoaDAO;
 import morais.rh.DAO.ModelosDAO.TipoDAO;
+import morais.rh.DAO.ModelosDAO.UsuarioDAO;
 import morais.rh.DAO.ModelosDAO.VisitaDao;
 import morais.rh.Modelo.Pessoa;
 import morais.rh.Modelo.Tipo;
+import morais.rh.Modelo.Usuario;
 import morais.rh.Modelo.Visita;
 
 public class EntradaPessoas {
@@ -61,9 +66,26 @@ public class EntradaPessoas {
     @FXML
     TextField Inome;
 
+    @FXML
+    Label LTitulo;
+
+    @FXML
+    Label Lbusca;
+
+    @FXML
+    Label Ltipo;
+
+    @FXML
+    Label Lmotivo;
+
+    @FXML
+    Label Lramal;
+
     ArrayList<Tipo> tipos = TipoDAO.buscarUsuario();
     ArrayList<Pessoa> pessoas =  PessoaDAO.buscarPessoa();
     ArrayList<Visita> visitas = VisitaDao.buscarVisitas();
+    ArrayList<Usuario> usuarios = UsuarioDAO.buscarUsuario();
+    Usuario usuAtual = usuarios.get(usuarios.get(0).getAtual());
 
     public void initialize(){
 
@@ -210,6 +232,10 @@ public class EntradaPessoas {
             } catch (IOException e) {
             }
         });
+
+        Platform.runLater(() -> {
+            aplicarTema(usuAtual);
+        });
         
     }
 
@@ -223,6 +249,88 @@ public class EntradaPessoas {
         }
 
         return tem;
+    }
+
+    private void aplicarTema(Usuario usuAtual) {
+        Scene scene = Bcancela.getScene(); // Troque Bpeople para Bcancela ou ajuste conforme necessário
+        if (usuAtual.getTema() == 1) {
+            // Configuração de cores para o tema escuro
+            scene.getRoot().setStyle("-fx-background-color: #2E2E2E;");
+            aplicarEstiloEscuro(Bcancela);
+            aplicarEstiloEscuro(Bregistro);
+            aplicarEstiloEscuro(Ctipo);
+            aplicarEstiloEscuro(Cramais);
+            aplicarEstiloEscuro(Lconfirma);
+            aplicarEstiloEscuro(Imotivo);
+            aplicarEstiloEscuro(Ibusca);
+            aplicarEstiloEscuro(Idocumento);
+            aplicarEstiloEscuro(Itelefone);
+            aplicarEstiloEscuro(Inome);
+            aplicarEstiloEscuro(LTitulo);
+            aplicarEstiloEscuro(Lbusca);
+            aplicarEstiloEscuro(Lmotivo);
+            aplicarEstiloEscuro(Lramal);
+            aplicarEstiloEscuro(Ltipo);
+        } else {
+            // Configuração de cores para o tema claro (pode ajustar conforme necessário)
+            scene.getRoot().setStyle("-fx-background-color: #FFFFFF;");
+            resetarEstilo(Bcancela);
+            resetarEstilo(Bregistro);
+            resetarEstilo(Ctipo);
+            resetarEstilo(Cramais);
+            resetarEstilo(Lconfirma);
+            resetarEstilo(Imotivo);
+            resetarEstilo(Ibusca);
+            resetarEstilo(Idocumento);
+            resetarEstilo(Itelefone);
+            resetarEstilo(Inome);
+            resetarEstilo(LTitulo);
+            resetarEstilo(Lbusca);
+            resetarEstilo(Lmotivo);
+            resetarEstilo(Lramal);
+            resetarEstilo(Ltipo);
+        }
+    }
+
+    private void aplicarEstiloEscuro(Button button) {
+        button.setStyle("-fx-background-color: #424242; -fx-text-fill: #FFFFFF;");
+    }
+
+    private void aplicarEstiloEscuro(Label label) {
+        label.setTextFill(Color.WHITE);
+    }
+
+    private void aplicarEstiloEscuro(TextField textField) {
+        textField.setStyle("-fx-background-color: #424242; -fx-text-fill: #FFFFFF;");
+    }
+
+    private void resetarEstilo(Button button) {
+        button.setStyle(""); // Resetar para os estilos padrão
+    }
+
+    private void resetarEstilo(Label label) {
+        label.setTextFill(Color.BLACK); // Resetar para a cor padrão
+    }
+
+    private void resetarEstilo(TextField textField) {
+        textField.setStyle(""); // Resetar para os estilos padrão
+    }
+
+
+    private void aplicarEstiloEscuro(ChoiceBox<String> choiceBox) {
+        choiceBox.setStyle("-fx-background-color: #424242; -fx-text-fill: #FFFFFF;");
+    }
+    
+    private void resetarEstilo(ChoiceBox<String> choiceBox) {
+        choiceBox.setStyle(""); // Resetar para os estilos padrão
+    }
+
+    private void aplicarEstiloEscuro(TextArea textArea) {
+        textArea.setStyle("-fx-background-color: #424242; -fx-text-fill: #FFFFFF; -fx-control-inner-background: #424242;");
+    }
+    
+    private void resetarEstilo(TextArea textArea) {
+        textArea.setStyle("-fx-control-inner-background: #FFFFFF;"); // Resetar a cor de fundo interna para a cor padrão
     }
     
 }

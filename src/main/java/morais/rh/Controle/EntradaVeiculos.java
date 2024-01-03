@@ -6,10 +6,12 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
@@ -19,13 +21,16 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import morais.rh.App;
 import morais.rh.DAO.ModelosDAO.PessoaDAO;
 import morais.rh.DAO.ModelosDAO.TipoDAO;
+import morais.rh.DAO.ModelosDAO.UsuarioDAO;
 import morais.rh.DAO.ModelosDAO.VeiculoDAO;
 import morais.rh.DAO.ModelosDAO.VisitaDao;
 import morais.rh.Modelo.Pessoa;
 import morais.rh.Modelo.Tipo;
+import morais.rh.Modelo.Usuario;
 import morais.rh.Modelo.Veiculo;
 import morais.rh.Modelo.Visita;
 
@@ -76,11 +81,52 @@ public class EntradaVeiculos {
     @FXML
     VBox PessoasV;
 
+    @FXML 
+    Label Ltitulo;
+
+    @FXML 
+    Label Llis;
+
+    @FXML 
+    Label LDados;
+
+    @FXML 
+    Label LCads;
+
+    @FXML 
+    Label Lplaca;
+
+    @FXML 
+    Label LCor;
+
+    @FXML 
+    Label Lmode;
+
+    @FXML 
+    Label Lrama;
+
+    @FXML 
+    Label Lpessoas;
+
+    @FXML 
+    Label Lpeop;
+
+    @FXML 
+    Label Ltip;
+
+    @FXML 
+    Label Lmot;
+
+    @FXML 
+    Label Lenvio;
+
     ArrayList<Tipo> tipos = TipoDAO.buscarUsuario();
     ArrayList<Pessoa> pessoas =  PessoaDAO.buscarPessoa();
     ArrayList<Visita> visitas = VisitaDao.buscarVisitas();
     ArrayList<Veiculo> veiculos = VeiculoDAO.buscarVeiculo();
     ArrayList<Pessoa> pessoasVei = new ArrayList<>();
+    ArrayList<Usuario> usuarios = UsuarioDAO.buscarUsuario();
+    Usuario usuAtual = usuarios.get(usuarios.get(0).getAtual());
 
     public void initialize(){
 
@@ -266,6 +312,10 @@ public class EntradaVeiculos {
             } catch (IOException e) {
             }
         });
+
+        Platform.runLater(() -> {
+            aplicarTema(usuAtual);
+        });
         
     }
     
@@ -278,7 +328,7 @@ public class EntradaVeiculos {
 
             Label cod = new Label(Integer.toString(pesoa.getCodigo()));
             Label nome = new Label(pesoa.getNome());
-            Button remove = new Button("Remover pessoa");
+            Button remove = new Button("Remover passageiro");
 
             remove.setOnAction((ActionEvent event) ->{
                 pessoasVei.remove(pesoa);
@@ -314,6 +364,114 @@ public class EntradaVeiculos {
         }
 
         return tem;
+    }
+
+    private void aplicarTema(Usuario usuAtual) {
+        Scene scene = BadiPassa.getScene();
+    
+        if (usuAtual.getTema() == 1) {
+            // Configuração de cores para o tema escuro
+            scene.getRoot().setStyle("-fx-background-color: #2E2E2E;");
+    
+            // Aplicar estilos escuros
+            aplicarEstiloEscuro(BadiPassa);
+            aplicarEstiloEscuro(Bcancela);
+            aplicarEstiloEscuro(Bregistro);
+            aplicarEstiloEscuro(Cramal);
+            aplicarEstiloEscuro(Ctipo);
+            aplicarEstiloEscuro(Imotivo);
+            aplicarEstiloEscuro(Icor);
+            aplicarEstiloEscuro(Idocumento);
+            aplicarEstiloEscuro(Imodelo);
+            aplicarEstiloEscuro(Inome);
+            aplicarEstiloEscuro(Iplaca);
+            aplicarEstiloEscuro(Itelefone);
+            aplicarEstiloEscuro(Ltitulo);
+            aplicarEstiloEscuro(LDados);
+            aplicarEstiloEscuro(LCads);
+            aplicarEstiloEscuro(Lplaca);
+            aplicarEstiloEscuro(LCor);
+            aplicarEstiloEscuro(Lmode);
+            aplicarEstiloEscuro(Lrama);
+            aplicarEstiloEscuro(Lpessoas);
+            aplicarEstiloEscuro(Lpeop);
+            aplicarEstiloEscuro(Ltip);
+            aplicarEstiloEscuro(Lmot);
+            aplicarEstiloEscuro(Lenvio);
+            aplicarEstiloEscuro(Llis);
+    
+        } else {
+            // Configuração de cores para o tema claro
+            scene.getRoot().setStyle("-fx-background-color: #FFFFFF;");
+    
+            // Resetar estilos para os padrões claros
+            resetarEstilo(BadiPassa);
+            resetarEstilo(Bcancela);
+            resetarEstilo(Bregistro);
+            resetarEstilo(Cramal);
+            resetarEstilo(Ctipo);
+            resetarEstilo(Imotivo);
+            resetarEstilo(Icor);
+            resetarEstilo(Idocumento);
+            resetarEstilo(Imodelo);
+            resetarEstilo(Inome);
+            resetarEstilo(Iplaca);
+            resetarEstilo(Itelefone);
+            resetarEstilo(Ltitulo);
+            resetarEstilo(LDados);
+            resetarEstilo(LCads);
+            resetarEstilo(Lplaca);
+            resetarEstilo(LCor);
+            resetarEstilo(Lmode);
+            resetarEstilo(Lrama);
+            resetarEstilo(Lpessoas);
+            resetarEstilo(Lpeop);
+            resetarEstilo(Ltip);
+            resetarEstilo(Lmot);
+            resetarEstilo(Lenvio);
+            resetarEstilo(Llis);
+        }
+    }
+
+    private void aplicarEstiloEscuro(Button button) {
+        button.setStyle("-fx-background-color: #424242; -fx-text-fill: #FFFFFF;");
+    }
+
+    private void aplicarEstiloEscuro(Label label) {
+        label.setTextFill(Color.WHITE);
+    }
+
+    private void aplicarEstiloEscuro(TextField textField) {
+        textField.setStyle("-fx-background-color: #424242; -fx-text-fill: #FFFFFF;");
+    }
+
+    private void resetarEstilo(Button button) {
+        button.setStyle(""); // Resetar para os estilos padrão
+    }
+
+    private void resetarEstilo(Label label) {
+        label.setTextFill(Color.BLACK); // Resetar para a cor padrão
+    }
+
+    private void resetarEstilo(TextField textField) {
+        textField.setStyle(""); // Resetar para os estilos padrão
+    }
+
+
+    private void aplicarEstiloEscuro(ChoiceBox<String> choiceBox) {
+        choiceBox.setStyle("-fx-background-color: #424242; -fx-text-fill: #FFFFFF;");
+    }
+    
+    private void resetarEstilo(ChoiceBox<String> choiceBox) {
+        choiceBox.setStyle(""); // Resetar para os estilos padrão
+    }
+
+    private void aplicarEstiloEscuro(TextArea textArea) {
+        textArea.setStyle("-fx-background-color: #424242; -fx-text-fill: #FFFFFF; -fx-control-inner-background: #424242;");
+    }
+    
+    private void resetarEstilo(TextArea textArea) {
+        textArea.setStyle("-fx-control-inner-background: #FFFFFF;"); // Resetar a cor de fundo interna para a cor padrão
     }
     
 }

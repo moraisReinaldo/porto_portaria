@@ -10,13 +10,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.stage.Stage;
 import morais.rh.App;
 import morais.rh.DAO.ModelosDAO.UsuarioDAO;
 import morais.rh.DAO.ModelosDAO.VisitaDao;
@@ -64,7 +60,6 @@ public class TelaInicialControle {
     ArrayList<Visita> possibilidades = new ArrayList<>();
     ArrayList<Usuario> usuarios = UsuarioDAO.buscarUsuario();
     Usuario usuAtual = usuarios.get(usuarios.get(0).getAtual());
-    private Scene scene;
     int moradores = 0;
     int veiculos = 0;
     int Nvisita = 0;
@@ -276,7 +271,7 @@ public class TelaInicialControle {
         Lveiculos.setText("Veiculos: " + veiculos);
     }
 
-        private void aplicarTema(Usuario usuAtual) {
+    private void aplicarTema(Usuario usuAtual) {
         Scene scene = Bpeople.getScene();
         if (usuAtual.getTema() == 1) {
             // Configuração de cores para o tema escuro
@@ -289,7 +284,6 @@ public class TelaInicialControle {
             aplicarEstiloEscuro(Lvisitantes);
             aplicarEstiloEscuro(LTitulo);
             aplicarEstiloEscuro(Tbusca);
-            aplicarEstiloEscuro(Vregistros);
         } else {
             // Configuração de cores para o tema claro (pode ajustar conforme necessário)
             scene.getRoot().setStyle("-fx-background-color: #FFFFFF;");
@@ -301,7 +295,6 @@ public class TelaInicialControle {
             resetarEstilo(Lvisitantes);
             resetarEstilo(LTitulo);
             resetarEstilo(Tbusca);
-            resetarEstilo(Vregistros);
         }
     }
 
@@ -321,19 +314,11 @@ public class TelaInicialControle {
         textField.setStyle(""); // Resetar para os estilos padrão
     }
     
-    private void resetarEstilo(VBox vbox) {
-        vbox.setBackground(null); // Resetar para o plano de fundo padrão
-    }
-
     private void aplicarEstiloEscuro(Label label) {
         label.setTextFill(Color.WHITE);
     }
 
     private void aplicarEstiloEscuro(TextField textField) {
         textField.setStyle("-fx-background-color: #424242; -fx-text-fill: #FFFFFF;");
-    }
-
-    private void aplicarEstiloEscuro(VBox vbox) {
-        vbox.setBackground(new Background(new BackgroundFill(Color.web("#2E2E2E"), CornerRadii.EMPTY, javafx.geometry.Insets.EMPTY)));
     }
 }

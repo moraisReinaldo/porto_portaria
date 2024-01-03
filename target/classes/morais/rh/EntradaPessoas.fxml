@@ -25,7 +25,7 @@
     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <Label text="Entrada de Pessoas">
+      <Label fx:id="LTitulo" text="Entrada de Pessoas">
          <font>
             <Font size="29.0" />
          </font>
@@ -35,7 +35,7 @@
       </Label>
       <VBox prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
          <children>
-            <Label text="Buscar por nome ou documento">
+            <Label fx:id="Lbusca" text="Buscar por nome ou documento">
                <font>
                   <Font size="15.0" />
                </font>
@@ -76,7 +76,7 @@
                   <TextField fx:id="Itelefone" promptText="Telefone" />
                   <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
-                        <Label text="Ramal" />
+                        <Label fx:id="Lramal" text="Ramal" />
                         <ChoiceBox fx:id="Cramais" prefWidth="150.0" />
                      </children>
                   </VBox>
@@ -92,13 +92,13 @@
                <children>
                   <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
-                        <Label text="Tipo de visitante" />
+                        <Label fx:id="Ltipo" text="Tipo de visitante" />
                         <ChoiceBox fx:id="Ctipo" prefWidth="150.0" />
                      </children>
                   </VBox>
                   <VBox prefHeight="106.0" prefWidth="722.0">
                      <children>
-                        <Label text="Motivo" />
+                        <Label fx:id="Lmotivo" text="Motivo" />
                         <TextArea fx:id="Imotivo" prefHeight="89.0" prefWidth="414.0" />
                      </children>
                   </VBox>

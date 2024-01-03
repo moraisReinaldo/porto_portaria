@@ -27,7 +27,7 @@
     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <Label text="Entrada de veículos">
+      <Label fx:id="Ltitulo" text="Entrada de veículos">
          <font>
             <Font size="30.0" />
          </font>
@@ -42,7 +42,7 @@
          <children>
             <VBox prefHeight="154.0" prefWidth="589.0">
                <children>
-                  <Label text="Dados do veiculo ">
+                  <Label fx:id="LDados" text="Dados do veiculo ">
                      <font>
                         <Font size="16.0" />
                      </font>
@@ -51,25 +51,25 @@
                      <children>
                         <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0">
                            <children>
-                              <Label text="Placa do veículo" />
+                              <Label fx:id="Lplaca" text="Placa do veículo" />
                               <TextField fx:id="Iplaca" />
                            </children>
                         </VBox>
                         <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0">
                            <children>
-                              <Label text="Cor do veículo" />
+                              <Label fx:id="LCor" text="Cor do veículo" />
                               <TextField fx:id="Icor" alignment="CENTER" />
                            </children>
                         </VBox>
                         <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0">
                            <children>
-                              <Label text="Modelo do veículo" />
+                              <Label fx:id="Lmode" text="Modelo do veículo" />
                               <TextField fx:id="Imodelo" alignment="CENTER" />
                            </children>
                         </VBox>
                         <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0">
                            <children>
-                              <Label text="Ramal" />
+                              <Label fx:id="Lrama" text="Ramal" />
                               <ChoiceBox fx:id="Cramal" prefWidth="150.0" />
                            </children>
                         </VBox>
@@ -84,7 +84,7 @@
             <Insets left="20.0" />
          </padding>
          <children>
-            <Label text="Pessoas do veículo">
+            <Label fx:id="Lpessoas" text="Pessoas do veículo">
                <font>
                   <Font size="15.0" />
                </font>
@@ -100,13 +100,13 @@
                <children>
                   <VBox prefHeight="86.0" prefWidth="142.0">
                      <children>
-                        <Label prefHeight="18.0" prefWidth="121.0" text="Tipo de visitante" />
+                        <Label fx:id="Ltip" prefHeight="18.0" prefWidth="121.0" text="Tipo de visitante" />
                         <ChoiceBox fx:id="Ctipo" prefWidth="150.0" />
                      </children>
                   </VBox>
                   <VBox prefHeight="86.0" prefWidth="203.0">
                      <children>
-                        <Label text="Motivo" />
+                        <Label fx:id="Lmot" text="Motivo" />
                         <TextArea fx:id="Imotivo" prefHeight="55.0" prefWidth="203.0" />
                      </children>
                   </VBox>
@@ -115,14 +115,9 @@
             </HBox>
          </children>
       </VBox>
-      <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
-         <padding>
-            <Insets left="20.0" right="20.0" />
-         </padding>
-      </VBox>
       <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="4">
          <children>
-            <Label text="Envio de dados">
+            <Label fx:id="Lenvio" text="Envio de dados">
                <font>
                   <Font size="15.0" />
                </font>
@@ -140,24 +135,38 @@
       </VBox>
       <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
          <children>
-            <Label text="Veiculos cadastrados (Placas)" />
+            <Label fx:id="LCads" text="Veiculos cadastrados (Placas)" />
             <HBox fx:id="HVeiculos" prefHeight="134.0" prefWidth="512.0" />
          </children>
+         <GridPane.margin>
+            <Insets left="20.0" />
+         </GridPane.margin>
       </VBox>
       <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
          <children>
-            <Label text="Pessoas cadastradas (Nome)" />
+            <Label fx:id="Lpeop" text="Pessoas cadastradas (Nome)" />
             <HBox fx:id="Hpassageiro" prefHeight="130.0" prefWidth="512.0" spacing="5.0" />
          </children>
+         <GridPane.margin>
+            <Insets left="20.0" />
+         </GridPane.margin>
       </VBox>
-      <ScrollPane prefHeight="151.0" prefWidth="1024.0" GridPane.rowIndex="3">
-         <content>
-            <VBox fx:id="PessoasV" maxWidth="1.7976931348623157E308" prefHeight="166.0" prefWidth="486.0" spacing="20.0">
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </padding>
-            </VBox>
-         </content>
-      </ScrollPane>
+      <VBox prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="3">
+         <children>
+            <Label fx:id="Llis" text="Passageiros no veiculo" />
+            <ScrollPane prefHeight="151.0" prefWidth="1024.0">
+               <content>
+                  <VBox fx:id="PessoasV" maxWidth="1.7976931348623157E308" prefHeight="166.0" prefWidth="476.0" spacing="20.0">
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </VBox>
+               </content>
+            </ScrollPane>
+         </children>
+         <GridPane.margin>
+            <Insets left="20.0" />
+         </GridPane.margin>
+      </VBox>
    </children>
 </GridPane>
