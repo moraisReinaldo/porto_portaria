@@ -9,6 +9,7 @@ import morais.rh.DAO.ModelosDAO.PessoaDAO;
 import morais.rh.DAO.ModelosDAO.TipoDAO;
 import morais.rh.DAO.ModelosDAO.UsuarioDAO;
 import morais.rh.DAO.ModelosDAO.VeiculoDAO;
+import morais.rh.DAO.ModelosDAO.VisitaDao;
 
 public class ControleBanco {
 
@@ -65,6 +66,7 @@ public class ControleBanco {
         PessoaDAO.UpPessoa();
         UsuarioDAO.UpUsuario();
         VeiculoDAO.UpVeiculo();
-        AlteraDAO.atualizarSitua(0);
+        VisitaDao.UpVisitas();
+        AlteraDAO.atualizarSitua(1);
     }
 }

@@ -170,7 +170,9 @@ public class UsuarioDAO {
         }
         for(Usuario usu : usu2){
             try {
-                adicionaUsuario(usu);
+                if(usu.getCod() != 0){
+                    adicionaUsuario(usu);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }

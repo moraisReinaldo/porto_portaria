@@ -135,8 +135,9 @@ public class TelaInicialControle {
         });
 
         Platform.runLater(() -> {
+            System.out.println(usuAtual.getCod() +" "+ usuAtual.getTema());
             aplicarTema(usuAtual);
-            if(AlteraDAO.buscarStatus() != 0){
+            if(AlteraDAO.buscarStatus() != 1){
                 ControleBanco.AtualizarB();
             }
         });

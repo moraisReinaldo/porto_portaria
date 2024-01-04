@@ -20,6 +20,7 @@ public class App extends Application {
         scene = new Scene(loadFXML("Login"), 1024, 768);
         stage.setScene(scene);
         stage.show();
+        stage.setTitle("Portaria Porto");
     }
 
     public static void setRoot(String fxml) throws IOException {

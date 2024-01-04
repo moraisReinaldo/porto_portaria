@@ -169,8 +169,14 @@ public class VisitaDao {
             stmt.setInt(2, cod);
         
             int linhasAfetadas = stmt.executeUpdate();
+
+            PreparedStatement stmt2 = conexao2.prepareStatement(sql);
+            stmt2.setString(1, novaS);
+            stmt2.setInt(2, cod);
+        
+            int linhasAfetadas2 = stmt2.executeUpdate();
     
-            if (linhasAfetadas > 0) {
+            if (linhasAfetadas > 0 && linhasAfetadas2 > 0) {
                 System.out.println("Visita atualizada com sucesso.");
             } else {
                 System.out.println("Nenhuma visita foi atualizada.");
@@ -187,15 +193,14 @@ public class VisitaDao {
         ArrayList<Visita> usu1 = buscarVisitas();
         ArrayList<Visita> usu2 = buscarVisitas2();
         
-        for(Visita usu : usu2){
-            apagarVisita(usu.getCod());
-        }
-        for(Visita usu : usu1){
+       if(usu1.size() > usu2.size()){
+        for(int i = (usu2.size() - 1); i < usu1.size(); i++){
             try {
-                adicionaVisita2(usu);
+                usu2.add(usu1.get(i));
+                adicionaVisita2(usu1.get(i));
             } catch (IOException e) {
-                e.printStackTrace();
             }
         }
+       }
     }
 }

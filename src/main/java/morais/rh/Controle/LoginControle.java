@@ -3,6 +3,7 @@ package morais.rh.Controle;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -14,6 +15,8 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import morais.rh.App;
+import morais.rh.DAO.ControleBanco;
+import morais.rh.DAO.ModelosDAO.AlteraDAO;
 import morais.rh.DAO.ModelosDAO.UsuarioDAO;
 import morais.rh.Modelo.Usuario;
 
@@ -49,8 +52,10 @@ public class LoginControle {
                 
                 if(usu.getUsuario().equals(usuario) && usu.getSenha().equals(senha)){
                     try {
+                        for(Usuario usu1 : usus){
+                            UsuarioDAO.atualizarAtual(usu1.getCod(), usu.getCod());
+                        }
                         App.setRoot("TelaInicial");
-                        UsuarioDAO.atualizarAtual(0, usu.getCod());
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -67,6 +72,13 @@ public class LoginControle {
                 Lrevela.setText(Lsenha.getText());
             }else{
                 Lrevela.setText(null);
+            }
+        });
+
+        Platform.runLater(() -> {
+            if(AlteraDAO.buscarStatus() != 1){
+                ControleBanco.AtualizarB();
+                usus = UsuarioDAO.buscarUsuario();
             }
         });
 

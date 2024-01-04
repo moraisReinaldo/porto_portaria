@@ -74,7 +74,7 @@ public class ControleBanco2 {
                          "UsuCod INTEGER PRIMARY KEY" +
                          ");" +
                          "CREATE TABLE IF NOT EXISTS Veiculo (" +
-                         "VeiPlaca VARCHAR(10) PRIMARY KEY," +
+                         "VeiPlaca VARCHAR(8) PRIMARY KEY," +
                          "VeiCor VARCHAR(60)," +
                          "VeiModelo VARCHAR(60)," +
                          "VeiRamal VARCHAR(4)" +

@@ -89,22 +89,22 @@ public class TipoDAO {
     
 
     public static void apagarTipo(int cod) {
-        try {
-            String sql = "DELETE FROM Tipo WHERE TipoCod = ?";
-            PreparedStatement preparedStatement = conexao.prepareStatement(sql);
-            preparedStatement.setInt(1, cod);
+            try {
+                String sql = "DELETE FROM Tipo WHERE TipoCod = ?";
+                PreparedStatement preparedStatement = conexao.prepareStatement(sql);
+                preparedStatement.setInt(1, cod);
 
-            int linhasAfetadas = preparedStatement.executeUpdate();
+                int linhasAfetadas = preparedStatement.executeUpdate();
 
-            if (linhasAfetadas > 0) {
-                System.out.println("Tipo deletado com sucesso.");
-            } else {
-                System.out.println("Nenhum Tipo foi deletado.");
+                if (linhasAfetadas > 0) {
+                    System.out.println("Tipo deletado com sucesso.");
+                } else {
+                    System.out.println("Nenhum Tipo foi deletado.");
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw new RuntimeException("Erro ao apagar tipo no banco de dados: " + e.getMessage());
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Erro ao apagar tipo no banco de dados: " + e.getMessage());
-        }
     }
 
     public static void UpTipo(){
