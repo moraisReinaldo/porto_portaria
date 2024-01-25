@@ -69,8 +69,8 @@
                         </VBox>
                         <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0">
                            <children>
-                              <Label fx:id="Lrama" text="Ramal" />
-                              <ChoiceBox fx:id="Cramal" prefWidth="150.0" />
+                              <Label fx:id="Lramal" text="Ramal" />
+                              <TextField fx:id="IRamal" />
                            </children>
                         </VBox>
                      </children>

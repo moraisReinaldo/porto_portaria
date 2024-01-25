@@ -48,9 +48,6 @@ public class EntradaVeiculos {
     Button Bregistro;
 
     @FXML
-    ChoiceBox<String> Cramal;
-
-    @FXML
     ChoiceBox<String> Ctipo;
 
     @FXML
@@ -73,6 +70,9 @@ public class EntradaVeiculos {
 
     @FXML
     TextField Inome;
+
+    @FXML
+    TextField IRamal;
 
     @FXML
     TextField Iplaca;
@@ -105,7 +105,7 @@ public class EntradaVeiculos {
     Label Lmode;
 
     @FXML 
-    Label Lrama;
+    Label Lramal;
 
     @FXML 
     Label Lpessoas;
@@ -137,14 +137,7 @@ public class EntradaVeiculos {
             tiposO.add(tipo.getDesc());
         }
         Ctipo.setItems(tiposO);
-        
-        ObservableList<String> ramais = FXCollections.observableArrayList();
-        for(int i = 8001; i <=  8177; i++){
-            ramais.add(Integer.toString(i));
-        }
-        Cramal.setItems(ramais);
-
-        
+                
         //Pessoa by Nome;
         ArrayList<String> possibilidadesP = new ArrayList<>();
         for(Pessoa pessoa : pessoas){
@@ -208,7 +201,7 @@ public class EntradaVeiculos {
                                     Iplaca.setText(veiculo.getPlaca());
                                     Icor.setText(veiculo.getCor());
                                     Imodelo.setText(veiculo.getModelo());
-                                    Cramal.setValue(veiculo.getRamal());
+                                    IRamal.setText(veiculo.getRamal());
                                 }
                             }
                         }
@@ -227,7 +220,7 @@ public class EntradaVeiculos {
                         Iplaca.setText(veiculo.getPlaca());
                         Icor.setText(veiculo.getCor());
                         Imodelo.setText(veiculo.getModelo());
-                        Cramal.setValue(veiculo.getRamal());
+                        IRamal.setText(veiculo.getRamal());
                     }
                 }
             }
@@ -245,10 +238,10 @@ public class EntradaVeiculos {
 
 
         BadiPassa.setOnAction((ActionEvent event) ->{
-            if(Iplaca.getText()!= null && Cramal.getValue()!= null){
+            if(Iplaca.getText()!= null && (IRamal.getText()!= null && Integer.valueOf(IRamal.getText()) <= 8177 && Integer.valueOf(IRamal.getText()) > 8000)){
                 BadiPassa.setText("Adicionar passageiro");  
                     try {
-                        Pessoa pessoa = new Pessoa(pessoasVei.size(), Inome.getText(), Idocumento.getText(), Itelefone.getText(), Cramal.getValue(), Ctipo.getValue());
+                        Pessoa pessoa = new Pessoa(pessoasVei.size(), Inome.getText(), Idocumento.getText(), Itelefone.getText(), IRamal.getText(), Ctipo.getValue());
                         pessoasVei.add(pessoa);
                         gerarP(pessoasVei);
                     } catch (Exception e) {
@@ -262,7 +255,7 @@ public class EntradaVeiculos {
         Bregistro.setOnAction((ActionEvent event) ->{
 
             if(temNoBancoV(Iplaca.getText()) == false){
-                Veiculo vei = new Veiculo(Iplaca.getText().toUpperCase(), Icor.getText(), Imodelo.getText(), Cramal.getValue());
+                Veiculo vei = new Veiculo(Iplaca.getText().toUpperCase(), Icor.getText(), Imodelo.getText(), IRamal.getText());
                 try {
                     VeiculoDAO.adicionaVeiculo(vei);
                 } catch (IOException e) {
@@ -301,7 +294,7 @@ public class EntradaVeiculos {
                         codV = visitas.get(visitas.size()-1).getCod() + 1;
                     }
 
-                    Visita visita = new Visita(codV, Imotivo.getText().trim(), entrada, "Não informada", peo.getNome(), Iplaca.getText().toUpperCase(), peo.getTipo(), Cramal.getValue());
+                    Visita visita = new Visita(codV, Imotivo.getText().trim(), entrada, "Não informada", peo.getNome(), Iplaca.getText().toUpperCase(), peo.getTipo(), IRamal.getText());
                     try {
                         VisitaDao.adicionaVisita(visita);
                     } catch (IOException e) {
@@ -390,7 +383,7 @@ public class EntradaVeiculos {
             aplicarEstiloEscuro(BadiPassa);
             aplicarEstiloEscuro(Bcancela);
             aplicarEstiloEscuro(Bregistro);
-            aplicarEstiloEscuro(Cramal);
+            aplicarEstiloEscuro(IRamal);
             aplicarEstiloEscuro(Ctipo);
             aplicarEstiloEscuro(Imotivo);
             aplicarEstiloEscuro(Icor);
@@ -405,13 +398,13 @@ public class EntradaVeiculos {
             aplicarEstiloEscuro(Lplaca);
             aplicarEstiloEscuro(LCor);
             aplicarEstiloEscuro(Lmode);
-            aplicarEstiloEscuro(Lrama);
             aplicarEstiloEscuro(Lpessoas);
             aplicarEstiloEscuro(Lpeop);
             aplicarEstiloEscuro(Ltip);
             aplicarEstiloEscuro(Lmot);
             aplicarEstiloEscuro(Lenvio);
             aplicarEstiloEscuro(Llis);
+            aplicarEstiloEscuro(Lramal);
     
         } else {
             // Configuração de cores para o tema claro
@@ -421,7 +414,7 @@ public class EntradaVeiculos {
             resetarEstilo(BadiPassa);
             resetarEstilo(Bcancela);
             resetarEstilo(Bregistro);
-            resetarEstilo(Cramal);
+            resetarEstilo(IRamal);
             resetarEstilo(Ctipo);
             resetarEstilo(Imotivo);
             resetarEstilo(Icor);
@@ -436,13 +429,13 @@ public class EntradaVeiculos {
             resetarEstilo(Lplaca);
             resetarEstilo(LCor);
             resetarEstilo(Lmode);
-            resetarEstilo(Lrama);
             resetarEstilo(Lpessoas);
             resetarEstilo(Lpeop);
             resetarEstilo(Ltip);
             resetarEstilo(Lmot);
             resetarEstilo(Lenvio);
             resetarEstilo(Llis);
+            resetarEstilo(Lramal);
         }
     }
 

@@ -74,12 +74,7 @@
                   <TextField fx:id="Inome" prefHeight="26.0" prefWidth="300.0" promptText="Nome completo" />
                   <TextField fx:id="Idocumento" prefHeight="26.0" prefWidth="200.0" promptText="Documento (RG/CPF)" />
                   <TextField fx:id="Itelefone" promptText="Telefone" />
-                  <VBox prefHeight="200.0" prefWidth="100.0">
-                     <children>
-                        <Label fx:id="Lramal" text="Ramal" />
-                        <ChoiceBox fx:id="Cramais" prefWidth="150.0" />
-                     </children>
-                  </VBox>
+                  <TextField fx:id="IRamal" promptText="Ramal" />
                </children>
                <VBox.margin>
                   <Insets left="20.0" top="10.0" />

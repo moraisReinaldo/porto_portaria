@@ -43,7 +43,7 @@ public class EntradaPessoas {
     ChoiceBox<String> Ctipo;
 
     @FXML
-    ChoiceBox<String> Cramais;
+    TextField IRamal;
     
     @FXML
     HBox Hpossibilidades;
@@ -78,8 +78,6 @@ public class EntradaPessoas {
     @FXML
     Label Lmotivo;
 
-    @FXML
-    Label Lramal;
 
     ArrayList<Tipo> tipos = TipoDAO.buscarTipo1();
     ArrayList<Pessoa> pessoas =  PessoaDAO.buscarPessoa();
@@ -95,19 +93,11 @@ public class EntradaPessoas {
         }
         Ctipo.setItems(tiposO);
         
-        ObservableList<String> ramais = FXCollections.observableArrayList();
-        for(int i = 8001; i <=  8177; i++){
-            ramais.add(Integer.toString(i));
-        }
-        Cramais.setItems(ramais);
-
-
         ArrayList<String> possibilidades = new ArrayList<>();
         for(Pessoa pessoa : pessoas){
             possibilidades.add(pessoa.getDocumento());
             possibilidades.add(pessoa.getNome());
         }
-
 
         Ibusca.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
@@ -117,7 +107,7 @@ public class EntradaPessoas {
                                 if(pessoa.getNome().toLowerCase().trim().equals(possibilidade.toLowerCase().trim()) || pessoa.getDocumento().toLowerCase().trim().equals(possibilidade.toLowerCase().trim())){
                                     Inome.setText(pessoa.getNome());
                                     Itelefone.setText(pessoa.getTelefone());
-                                    Cramais.setValue(pessoa.getRamal());
+                                    IRamal.setText(pessoa.getRamal());
                                     Idocumento.setText(pessoa.getDocumento());
                                     Ctipo.setValue(pessoa.getTipo());
                                     Lconfirma.setText("Confirmar os dados de cadastro:");
@@ -130,9 +120,7 @@ public class EntradaPessoas {
 
         ListView<String> suggestionsListView = new ListView<>();
         suggestionsListView.setItems(FXCollections.observableArrayList(possibilidades));
-
         Hpossibilidades.getChildren().addAll(suggestionsListView);
-
         suggestionsListView.setOnMouseClicked(event -> {
             String selectedItem = suggestionsListView.getSelectionModel().getSelectedItem();
             if (selectedItem != null) {
@@ -141,7 +129,7 @@ public class EntradaPessoas {
                     if(pessoa.getNome().toLowerCase().trim().equals(selectedItem.toLowerCase().trim()) || pessoa.getDocumento().toLowerCase().trim().equals(selectedItem.toLowerCase().trim())){
                         Inome.setText(pessoa.getNome());
                         Itelefone.setText(pessoa.getTelefone());
-                        Cramais.setValue(pessoa.getRamal());
+                        IRamal.setText(pessoa.getRamal());
                         Idocumento.setText(pessoa.getDocumento());
                         Ctipo.setValue(pessoa.getTipo());
                         Lconfirma.setText("Confirmar os dados de cadastro:");
@@ -164,7 +152,7 @@ public class EntradaPessoas {
 
 
         Bregistro.setOnAction((ActionEvent event) ->{
-            if(temNoBancoP(Inome.getText()) == false){
+            if(temNoBancoP(Inome.getText()) == false && Integer.valueOf(IRamal.getText()) > 8000 && Integer.valueOf(IRamal.getText()) <= 8177){
                 try {
 
                     int cod;
@@ -174,7 +162,8 @@ public class EntradaPessoas {
                         cod = pessoas.get(pessoas.size()-1).getCodigo() + 1;
                     }
                     
-                    Pessoa pessNo = new Pessoa(cod, Inome.getText().trim(),Idocumento.getText().trim(), Itelefone.getText().trim(), Cramais.getValue(), Ctipo.getValue());
+                    
+                    Pessoa pessNo = new Pessoa(cod, Inome.getText().trim(),Idocumento.getText().trim(), Itelefone.getText().trim(), IRamal.getText(), Ctipo.getValue());
                     PessoaDAO.adicionaPessoa(pessNo);
                     pessoas = PessoaDAO.buscarPessoa();
 
@@ -199,7 +188,7 @@ public class EntradaPessoas {
                         codV = visitas.get(visitas.size()-1).getCod() + 1;
                     }
 
-                    Visita visita = new Visita(codV, Imotivo.getText().trim(), entrada, "Não informada", Inome.getText().trim(), "A pé", Ctipo.getValue(), Cramais.getValue());
+                    Visita visita = new Visita(codV, Imotivo.getText().trim(), entrada, "Não informada", Inome.getText().trim(), "A pé", Ctipo.getValue(), IRamal.getText());
                     VisitaDao.adicionaVisita(visita);
                     visitas = VisitaDao.buscarVisitas();
 
@@ -233,7 +222,7 @@ public class EntradaPessoas {
                         codV = visitas.get(visitas.size()-1).getCod() + 1;
                     }
 
-                    Visita visita = new Visita(codV, Imotivo.getText().trim(), entrada, "Não informada", Inome.getText().trim(), "A pé", Ctipo.getValue(), Cramais.getValue());
+                    Visita visita = new Visita(codV, Imotivo.getText().trim(), entrada, "Não informada", Inome.getText().trim(), "A pé", Ctipo.getValue(), IRamal.getText());
                     VisitaDao.adicionaVisita(visita);
                     visitas = VisitaDao.buscarVisitas();
 
@@ -280,7 +269,6 @@ public class EntradaPessoas {
             aplicarEstiloEscuro(Bcancela);
             aplicarEstiloEscuro(Bregistro);
             aplicarEstiloEscuro(Ctipo);
-            aplicarEstiloEscuro(Cramais);
             aplicarEstiloEscuro(Lconfirma);
             aplicarEstiloEscuro(Imotivo);
             aplicarEstiloEscuro(Ibusca);
@@ -290,15 +278,15 @@ public class EntradaPessoas {
             aplicarEstiloEscuro(LTitulo);
             aplicarEstiloEscuro(Lbusca);
             aplicarEstiloEscuro(Lmotivo);
-            aplicarEstiloEscuro(Lramal);
             aplicarEstiloEscuro(Ltipo);
+            aplicarEstiloEscuro(IRamal);
         } else {
             // Configuração de cores para o tema claro (pode ajustar conforme necessário)
             scene.getRoot().setStyle("-fx-background-color: #FFFFFF;");
             resetarEstilo(Bcancela);
+            resetarEstilo(IRamal);
             resetarEstilo(Bregistro);
             resetarEstilo(Ctipo);
-            resetarEstilo(Cramais);
             resetarEstilo(Lconfirma);
             resetarEstilo(Imotivo);
             resetarEstilo(Ibusca);
@@ -308,7 +296,6 @@ public class EntradaPessoas {
             resetarEstilo(LTitulo);
             resetarEstilo(Lbusca);
             resetarEstilo(Lmotivo);
-            resetarEstilo(Lramal);
             resetarEstilo(Ltipo);
         }
     }

@@ -2,6 +2,7 @@ morais\rh\Modelo\Visita.class
 morais\rh\DAO\ModelosDAO\UsuarioDAO.class
 morais\rh\Modelo\Usuario.class
 morais\rh\DAO\ControleBanco.class
+morais\rh\DAO\ModelosDAO\AlteraDAO.class
 morais\rh\DAO\ModelosDAO\TipoDAO.class
 morais\rh\Modelo\Tipo.class
 morais\rh\Controle\EntradaVeiculos.class
