@@ -294,7 +294,7 @@ public class EntradaVeiculos {
                         codV = visitas.get(visitas.size()-1).getCod() + 1;
                     }
 
-                    Visita visita = new Visita(codV, Imotivo.getText().trim(), entrada, "Não informada", peo.getNome(), Iplaca.getText().toUpperCase(), peo.getTipo(), IRamal.getText());
+                    Visita visita = new Visita(codV, Imotivo.getText().trim(), entrada, "Não informada", peo.getNome(), Iplaca.getText().toUpperCase(), peo.getTipo(), IRamal.getText(), usuAtual.getUsuario());
                     try {
                         VisitaDao.adicionaVisita(visita);
                     } catch (IOException e) {

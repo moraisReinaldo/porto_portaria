@@ -3,10 +3,10 @@ package morais.rh.Modelo;
 public class Visita {
     
     int cod;
-    String motivo, entrada, saida, pesNome, VeiPlaca, Tipo, ramal;
+    String motivo, entrada, saida, pesNome, VeiPlaca, Tipo, ramal, port;
     
     public Visita(int cod, String motivo, String entrada, String saida, String pesNome, String veiPlaca, String tipo,
-            String ramal) {
+            String ramal,String port) {
         this.cod = cod;
         this.motivo = motivo;
         this.entrada = entrada;
@@ -15,12 +15,21 @@ public class Visita {
         VeiPlaca = veiPlaca;
         Tipo = tipo;
         this.ramal = ramal;
+        this.port = port;
     }
 
     public String getPesNome() {
         return pesNome;
     }
 
+
+    public String getPort() {
+        return port;
+    }
+
+    public void setPort(String port) {
+        this.port = port;
+    }
 
     public void setPesNome(String pesNome) {
         this.pesNome = pesNome;

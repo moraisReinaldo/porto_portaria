@@ -2,7 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="morais.rh.Controle.EntradaPessoas">
+<GridPane alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" style="-fx-background-radius: 20 20 20 20;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="morais.rh.Controle.EntradaPessoas">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -43,7 +43,7 @@
                   <Insets bottom="10.0" />
                </VBox.margin>
             </Label>
-            <TextField fx:id="Ibusca">
+            <TextField fx:id="Ibusca" style="-fx-border-radius: 20px; -fx-background-radius: 20 20 20 20;">
                <font>
                   <Font size="15.0" />
                </font>
@@ -63,18 +63,18 @@
       </VBox>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
          <children>
-            <Button fx:id="Bregistro" mnemonicParsing="false" text="Registrar" />
-            <Button fx:id="Bcancela" mnemonicParsing="false" text="Cancelar" />
+            <Button fx:id="Bregistro" mnemonicParsing="false" style="-fx-background-radius: 20 20 20 20;" text="Registrar" />
+            <Button fx:id="Bcancela" mnemonicParsing="false" style="-fx-background-radius: 20 20 20 20;" text="Cancelar" />
          </children>
       </HBox>
       <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="2">
          <children>
             <HBox prefHeight="42.0" prefWidth="1004.0" spacing="10.0">
                <children>
-                  <TextField fx:id="Inome" prefHeight="26.0" prefWidth="300.0" promptText="Nome completo" />
-                  <TextField fx:id="Idocumento" prefHeight="26.0" prefWidth="200.0" promptText="Documento (RG/CPF)" />
-                  <TextField fx:id="Itelefone" promptText="Telefone" />
-                  <TextField fx:id="IRamal" promptText="Ramal" />
+                  <TextField fx:id="Inome" prefHeight="26.0" prefWidth="300.0" promptText="Nome completo" style="-fx-border-radius: 20px; -fx-background-radius: 20 20 20 20;" />
+                  <TextField fx:id="Idocumento" prefHeight="26.0" prefWidth="200.0" promptText="Documento (RG/CPF)" style="-fx-background-radius: 20 20 20 20;" />
+                  <TextField fx:id="Itelefone" promptText="Telefone" style="-fx-background-radius: 20 20 20 20;" />
+                  <TextField fx:id="IRamal" promptText="Ramal" style="-fx-background-radius: 20 20 20 20;" />
                </children>
                <VBox.margin>
                   <Insets left="20.0" top="10.0" />
@@ -88,7 +88,7 @@
                   <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
                         <Label fx:id="Ltipo" text="Tipo de visitante" />
-                        <ChoiceBox fx:id="Ctipo" prefWidth="150.0" />
+                        <ComboBox fx:id="Ctipo" prefWidth="150.0" />
                      </children>
                   </VBox>
                   <VBox prefHeight="106.0" prefWidth="722.0">
@@ -101,7 +101,7 @@
             </HBox>
          </children>
       </VBox>
-      <HBox fx:id="Hpossibilidades" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+      <HBox fx:id="Hpossibilidades" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="5.0" style="-fx-background-radius: 20 20 20 20;" GridPane.columnIndex="1" GridPane.rowIndex="1">
          <GridPane.margin>
             <Insets left="10.0" />
          </GridPane.margin>

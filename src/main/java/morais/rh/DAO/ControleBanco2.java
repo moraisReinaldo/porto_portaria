@@ -95,7 +95,8 @@ public class ControleBanco2 {
                          "PesNome VARCHAR(100)," +
                          "VisTipo VARCHAR(30)," +
                          "VeiPlaca VARCHAR(10)," +
-                         "VisRamal VARCHAR(4)" +
+                         "VisRamal VARCHAR(4)," +
+                         "VisPort Varchar(300)"+
                          ");" +
                          "CREATE TABLE IF NOT EXISTS Tipo (" +
                          "TipoCod INTEGER PRIMARY KEY," +

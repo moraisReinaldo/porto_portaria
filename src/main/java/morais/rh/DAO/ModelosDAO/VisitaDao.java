@@ -20,7 +20,7 @@ public class VisitaDao {
     private static Connection conexao2 = controle2.getConnection();
 
     public static void adicionaVisita(Visita visita) throws IOException {
-        String sql = "INSERT INTO Visita(VisCod, VisMotivo, VisEntrada, VisSaida, PesNome, VisTipo, VeiPlaca, VisRamal) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Visita(VisCod, VisMotivo, VisEntrada, VisSaida, PesNome, VisTipo, VeiPlaca, VisRamal, VisPort) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
     
         try {
             PreparedStatement stmt = conexao.prepareStatement(sql);
@@ -32,6 +32,7 @@ public class VisitaDao {
             stmt.setString(6, visita.getTipo());
             stmt.setString(7, visita.getVeiPlaca());
             stmt.setString(8, visita.getRamal());
+            stmt.setString(9, visita.getPort());
     
             stmt.execute();
             stmt.close();
@@ -45,6 +46,7 @@ public class VisitaDao {
             stmt2.setString(6, visita.getTipo());
             stmt2.setString(7, visita.getVeiPlaca());
             stmt2.setString(8, visita.getRamal());
+            stmt2.setString(9, visita.getPort());
     
             stmt2.execute();
             stmt2.close();
@@ -56,7 +58,7 @@ public class VisitaDao {
     }
 
         public static void adicionaVisita2(Visita visita) throws IOException {
-        String sql = "INSERT INTO Visita(VisCod, VisMotivo, VisEntrada, VisSaida, PesNome, VisTipo, VeiPlaca, VisRamal) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Visita(VisCod, VisMotivo, VisEntrada, VisSaida, PesNome, VisTipo, VeiPlaca, VisRamal, VisPort) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
     
         try {
             PreparedStatement stmt2 = conexao2.prepareStatement(sql);
@@ -68,6 +70,7 @@ public class VisitaDao {
             stmt2.setString(6, visita.getTipo());
             stmt2.setString(7, visita.getVeiPlaca());
             stmt2.setString(8, visita.getRamal());
+            stmt2.setString(9, visita.getPort());
     
             stmt2.execute();
             stmt2.close();
@@ -97,8 +100,9 @@ public class VisitaDao {
                 String tipo = resultSet.getString("VisTipo");
                 String Vei = resultSet.getString("VeiPlaca");
                 String ramal = resultSet.getString("VisRamal");
+                String port = resultSet.getString("VisPort");
     
-                Visita visita = new Visita(cod, motivo, entrada, saida, pesNome, Vei, tipo, ramal);
+                Visita visita = new Visita(cod, motivo, entrada, saida, pesNome, Vei, tipo, ramal, port);
                 visitas.add(visita);
             }
         } catch (SQLException e) {
@@ -128,8 +132,9 @@ public class VisitaDao {
                 String tipo = resultSet.getString("VisTipo");
                 String Vei = resultSet.getString("VeiPlaca");
                 String ramal = resultSet.getString("VisRamal");
+                String port = resultSet.getString("VisPort");
     
-                Visita visita = new Visita(cod, motivo, entrada, saida, pesNome, Vei, tipo, ramal);
+                Visita visita = new Visita(cod, motivo, entrada, saida, pesNome, Vei, tipo, ramal, port);
                 visitas.add(visita);
             }
         } catch (SQLException e) {

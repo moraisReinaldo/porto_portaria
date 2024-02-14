@@ -14,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
@@ -40,7 +41,7 @@ public class EntradaPessoas {
     Button Bregistro;
 
     @FXML
-    ChoiceBox<String> Ctipo;
+    ComboBox<String> Ctipo;
 
     @FXML
     TextField IRamal;
@@ -87,11 +88,11 @@ public class EntradaPessoas {
 
     public void initialize(){
 
-        ObservableList<String> tiposO = FXCollections.observableArrayList();
+
         for(Tipo tipo : tipos){
-            tiposO.add(tipo.getDesc());
+            Ctipo.getItems().add(tipo.getDesc());
         }
-        Ctipo.setItems(tiposO);
+
         
         ArrayList<String> possibilidades = new ArrayList<>();
         for(Pessoa pessoa : pessoas){
@@ -188,7 +189,7 @@ public class EntradaPessoas {
                         codV = visitas.get(visitas.size()-1).getCod() + 1;
                     }
 
-                    Visita visita = new Visita(codV, Imotivo.getText().trim(), entrada, "Não informada", Inome.getText().trim(), "A pé", Ctipo.getValue(), IRamal.getText());
+                    Visita visita = new Visita(codV, Imotivo.getText().trim(), entrada, "Não informada", Inome.getText().trim(), "A pé", Ctipo.getValue(), IRamal.getText(), usuAtual.getUsuario());
                     VisitaDao.adicionaVisita(visita);
                     visitas = VisitaDao.buscarVisitas();
 
@@ -222,7 +223,7 @@ public class EntradaPessoas {
                         codV = visitas.get(visitas.size()-1).getCod() + 1;
                     }
 
-                    Visita visita = new Visita(codV, Imotivo.getText().trim(), entrada, "Não informada", Inome.getText().trim(), "A pé", Ctipo.getValue(), IRamal.getText());
+                    Visita visita = new Visita(codV, Imotivo.getText().trim(), entrada, "Não informada", Inome.getText().trim(), "A pé", Ctipo.getValue(), IRamal.getText(), usuAtual.getUsuario());
                     VisitaDao.adicionaVisita(visita);
                     visitas = VisitaDao.buscarVisitas();
 
@@ -325,11 +326,17 @@ public class EntradaPessoas {
     }
 
 
-    private void aplicarEstiloEscuro(ChoiceBox<String> choiceBox) {
-        choiceBox.setStyle("-fx-background-color: #424242; -fx-text-fill: #FFFFFF;");
+    private void aplicarEstiloEscuro(ComboBox<String> choiceBox) {
+        choiceBox.setStyle(
+            "-fx-background-color: #424242; " +
+            "-fx-text-fill: White; " +
+            "-fx-text-inner-color: white; " +
+            "-fx-accent: white; "
+        );
+
     }
     
-    private void resetarEstilo(ChoiceBox<String> choiceBox) {
+    private void resetarEstilo(ComboBox<String> choiceBox) {
         choiceBox.setStyle(""); // Resetar para os estilos padrão
     }
 
