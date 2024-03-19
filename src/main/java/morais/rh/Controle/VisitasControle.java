@@ -59,7 +59,9 @@ public class VisitasControle {
     public void initialize() {
 
         for (Visita vis : visitas) {
-            possibilidades.add(vis);
+            if (vis.getCod() > (visitas.size() - 50)) {
+                possibilidades.add(vis);
+            }
         }
 
         INome.setOnKeyReleased(event -> {
@@ -190,7 +192,8 @@ public class VisitasControle {
 
         HBox dados = new HBox();
             dados.setSpacing(20);
-            dados.setMinHeight(20);
+            dados.setMinHeight(30);
+            dados.setMinWidth(890);
             dados.setAlignment(Pos.CENTER); // Centraliza verticalmente
 
             Label NomeD = new Label();
@@ -240,7 +243,8 @@ public class VisitasControle {
         for (Visita visita : possibilidades) {
             HBox pessoa = new HBox();
             pessoa.setSpacing(10);
-            pessoa.setMinHeight(30);
+            pessoa.setMinHeight(20);
+            pessoa.setMinWidth(890);
             pessoa.setAlignment(Pos.CENTER); // Centraliza verticalmente
 
             Label Nome = new Label();

@@ -188,10 +188,15 @@ public class EntradaPessoas {
                     }else{
                         codV = visitas.get(visitas.size()-1).getCod() + 1;
                     }
+                    if(temV(Inome.getText(),visitas)){
+                        Bregistro.setStyle("-fx-background-color: #FF0000; -fx-text-fill: #FFFFFF;");
+                    }else{
+                        Visita visita = new Visita(codV, Imotivo.getText().trim(), entrada, "Não informada", Inome.getText().trim(), "A pé", Ctipo.getValue(), IRamal.getText(), usuAtual.getUsuario());
+                        VisitaDao.adicionaVisita(visita);
+                        visitas = VisitaDao.buscarVisitas();
+                    }
 
-                    Visita visita = new Visita(codV, Imotivo.getText().trim(), entrada, "Não informada", Inome.getText().trim(), "A pé", Ctipo.getValue(), IRamal.getText(), usuAtual.getUsuario());
-                    VisitaDao.adicionaVisita(visita);
-                    visitas = VisitaDao.buscarVisitas();
+                    
 
                     Bcancela.setText("Finalizar");
                     Lconfirma.setText("Registro Realizado!");
@@ -223,12 +228,15 @@ public class EntradaPessoas {
                         codV = visitas.get(visitas.size()-1).getCod() + 1;
                     }
 
-                    Visita visita = new Visita(codV, Imotivo.getText().trim(), entrada, "Não informada", Inome.getText().trim(), "A pé", Ctipo.getValue(), IRamal.getText(), usuAtual.getUsuario());
-                    VisitaDao.adicionaVisita(visita);
-                    visitas = VisitaDao.buscarVisitas();
-
-                    Bcancela.setText("Finalizar");
-                    Lconfirma.setText("Registro Realizado!");
+                    if(temV(Inome.getText(),visitas)){
+                        Bregistro.setStyle("-fx-background-color: #FF0000; -fx-text-fill: #FFFFFF;");
+                    }else{
+                        Visita visita = new Visita(codV, Imotivo.getText().trim(), entrada, "Não informada", Inome.getText().trim(), "A pé", Ctipo.getValue(), IRamal.getText(), usuAtual.getUsuario());
+                        VisitaDao.adicionaVisita(visita);
+                        visitas = VisitaDao.buscarVisitas();
+                        Bcancela.setText("Finalizar");
+                        Lconfirma.setText("Registro Realizado!");
+                    }
 
                 } catch (IOException e) {   
                     e.printStackTrace();
@@ -346,6 +354,16 @@ public class EntradaPessoas {
     
     private void resetarEstilo(TextArea textArea) {
         textArea.setStyle("-fx-control-inner-background: #FFFFFF;"); // Resetar a cor de fundo interna para a cor padrão
+    }
+
+    public Boolean temV(String Nome, ArrayList<Visita> ops){
+        Boolean tem = false;
+        for(Visita p : ops){
+            if(p.getPesNome().toLowerCase().trim().equals(Nome.toLowerCase().trim()) && p.getSaida().equals("Não informada")){
+                tem = true;
+            }
+        }
+        return tem;
     }
     
 }

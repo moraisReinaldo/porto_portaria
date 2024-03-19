@@ -22,9 +22,7 @@ import morais.rh.Modelo.Usuario;
 import morais.rh.Modelo.Visita;
 
 import java.io.IOException;
-import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -65,9 +63,6 @@ public class TelaInicialControle {
     Label LPlaca;
 
     @FXML 
-    Label LPerma;
-
-    @FXML 
     Label LConfirmar;
 
     @FXML
@@ -106,7 +101,9 @@ public class TelaInicialControle {
 
     public void initialize() {
 
+        System.out.println(visitas.size());
         for (Visita vis : visitas) {
+            
             if (vis.getSaida().equals("Não informada")) {
                 possibilidades.add(vis);
             }
@@ -118,6 +115,7 @@ public class TelaInicialControle {
                 fastE.add(vis);
             }
         }
+        
 
         IBE.setOnKeyReleased(event -> {
             String input = IBE.getText().toLowerCase().trim();
@@ -207,11 +205,7 @@ public class TelaInicialControle {
         });
 
         Platform.runLater(() -> {
-            System.out.println(usuAtual.getCod() +" "+ usuAtual.getTema());
             aplicarTema(usuAtual);
-            if(AlteraDAO.buscarStatus() != 1){
-                ControleBanco.AtualizarB();
-            }
         });
     }
 
@@ -219,51 +213,44 @@ public class TelaInicialControle {
         Vregistros.getChildren().clear(); // Limpa os registros existentes
 
         for (Visita visita : possibilidades) {
+            if(visita.getCod() > possibilidades.size() - 50){
             HBox pessoa = new HBox();
             pessoa.setSpacing(10);
-            pessoa.setMaxWidth(450);
+            pessoa.setMaxWidth(550);
             pessoa.setAlignment(Pos.CENTER); // Centraliza verticalmente
 
             Label Nome = new Label();
             Nome.setText(visita.getPesNome() + " " + visita.getTipo());
-            Nome.setMinWidth(80);
+            Nome.setMinWidth(120);
             Nome.setWrapText(true);
-            Nome.setMaxWidth(80); 
+            Nome.setMaxWidth(120); 
             Nome.setAlignment(Pos.CENTER);
             pessoa.getChildren().add(Nome);
 
             Label entrada = new Label();
             entrada.setText(visita.getEntrada());
-            entrada.setMinWidth(70);
+            entrada.setMinWidth(100);
             entrada.setWrapText(true);
-            entrada.setMaxWidth(70);
+            entrada.setMaxWidth(100);
             entrada.wrapTextProperty();
             entrada.setAlignment(Pos.CENTER);
             pessoa.getChildren().add(entrada);
 
             Label ramal = new Label();
             ramal.setText(visita.getRamal());
-            ramal.setMinWidth(30);
+            ramal.setMinWidth(50);
             ramal.setWrapText(true);
-            ramal.setMaxWidth(30); 
+            ramal.setMaxWidth(50); 
             ramal.setAlignment(Pos.CENTER);
             pessoa.getChildren().add(ramal);
 
             Label placa = new Label();
             placa.setText(visita.getVeiPlaca());
-            placa.setMinWidth(30);
+            placa.setMinWidth(60);
             placa.setWrapText(true);
-            placa.setMaxWidth(30); 
+            placa.setMaxWidth(60); 
             placa.setAlignment(Pos.CENTER);
             pessoa.getChildren().add(placa);
-
-            Label timer = new Label();
-            timer.setText(calcularTempoPassado(visita.getEntrada()));
-            timer.setMinWidth(60);
-            timer.setWrapText(true);
-            timer.setMaxWidth(60); 
-            timer.setAlignment(Pos.CENTER);
-            pessoa.getChildren().add(timer);
 
             LocalDate currentDate = LocalDate.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -278,8 +265,8 @@ public class TelaInicialControle {
 
             Button finaliza = new Button();
             finaliza.setText("Registrar");
-            finaliza.setMinWidth(80);
-            finaliza.setMaxWidth(80); 
+            finaliza.setMinWidth(100);
+            finaliza.setMaxWidth(100); 
             finaliza.setAlignment(Pos.CENTER);
             finaliza.setOnAction((ActionEvent event) -> {
                 VisitaDao.atualizarVisitaData(visita.getCod(), hSaiada);
@@ -315,7 +302,7 @@ public class TelaInicialControle {
             }
             pessoa.getChildren().add(finaliza);
             Vregistros.getChildren().add(pessoa);
-        
+            }
         }
     }
 
@@ -349,14 +336,14 @@ public class TelaInicialControle {
         for (Visita visita : fastE) {
             HBox pessoa = new HBox();
             pessoa.setSpacing(10);
-            pessoa.setMaxWidth(450);
+            pessoa.setMaxWidth(550);
             pessoa.setAlignment(Pos.CENTER); // Centraliza verticalmente
 
             Label Nome = new Label();
             Nome.setText(visita.getPesNome());
-            Nome.setMinWidth(80);
+            Nome.setMinWidth(100);
             Nome.setWrapText(true);
-            Nome.setMaxWidth(80); 
+            Nome.setMaxWidth(100); 
             Nome.setAlignment(Pos.CENTER);
             pessoa.getChildren().add(Nome);
 
@@ -370,9 +357,9 @@ public class TelaInicialControle {
 
             Label placa = new Label();
             placa.setText(visita.getVeiPlaca());
-            placa.setMinWidth(40);
+            placa.setMinWidth(70);
             placa.setWrapText(true);
-            placa.setMaxWidth(40); 
+            placa.setMaxWidth(70); 
             placa.setAlignment(Pos.CENTER);
             pessoa.getChildren().add(placa);
 
@@ -395,63 +382,31 @@ public class TelaInicialControle {
             finaliza.setAlignment(Pos.CENTER);
             finaliza.setOnAction((ActionEvent event) -> {                
                 try {
-                    Visita viu = new Visita(visitas.size(), visita.getMotivo(), Hentrada, "Não informada",visita.getPesNome() , visita.getVeiPlaca(), visita.getTipo(), visita.getRamal(), usuAtual.getUsuario());
-                    VisitaDao.adicionaVisita(viu);
-                    visitas.add(viu);
-                    possibilidades.add(viu);
-                    atualizarTimers();
+                    if(temV(visita.getPesNome(), possibilidades)){
+                        finaliza.setStyle("-fx-background-color: #FF0000; -fx-text-fill: #FFFFFF;");
+                    }else{
+                        Visita viu = new Visita(visitas.size(), visita.getMotivo(), Hentrada, "Não informada",visita.getPesNome() , visita.getVeiPlaca(), visita.getTipo(), visita.getRamal(), usuAtual.getUsuario());
+                        VisitaDao.adicionaVisita(viu);
+                        visitas.add(viu);
+                        possibilidades.add(viu);
+                        atualizarTimers();
+                    }
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
             });
 
-            if(visita.getCod() %2 == 0){
-                pessoa.setStyle(
+            pessoa.setStyle(
                     "-fx-background-color: GAINSBORO;" +
                     "-fx-background-radius: 20 20 20 20;" +
                     "-fx-border-radius: 20 20 20 20;"
                 );
-                aplicarEstiloEscuro(finaliza);
-            }else{
-                pessoa.setStyle(
-                    "-fx-background-color: LAVENDER;" +
-                    "-fx-background-radius: 20 20 20 20;" +
-                    "-fx-border-radius: 20 20 20 20;"
-                );
-            }
             pessoa.getChildren().add(finaliza);
             VEM.getChildren().add(pessoa);
         
         }
         }
     }
-
-    public static String calcularTempoPassado(String dataHoraString) {
-        LocalDateTime dataHoraInformada = converteStringParaLocalDateTime(dataHoraString);
-        Duration tempoPassado = calculaTempoPassado(dataHoraInformada);
-        return formatarDuracao(tempoPassado);
-    }
-
-    private static LocalDateTime converteStringParaLocalDateTime(String dataHoraString) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm:ss");
-        return LocalDateTime.parse(dataHoraString, formatter);
-    }
-
-    private static Duration calculaTempoPassado(LocalDateTime dataHoraInformada) {
-        LocalDateTime momentoAtual = LocalDateTime.now();
-        return Duration.between(dataHoraInformada, momentoAtual);
-    }
-
-    private static String formatarDuracao(Duration duracao) {
-        long segundos = duracao.getSeconds();
-        long horas = segundos / 3600;
-        long minutos = (segundos % 3600) / 60;
-        segundos = segundos % 60;
-
-        return String.format("%02d:%02d:%02d", horas, minutos, segundos);
-    }
-
 
     private void aplicarTema(Usuario usuAtual) {
         Scene scene = Bpeople.getScene();
@@ -464,7 +419,6 @@ public class TelaInicialControle {
             aplicarEstiloEscuro(LTitulo);
             aplicarEstiloEscuro(Tbusca);
             aplicarEstiloEscuro(LConfirmar);
-            aplicarEstiloEscuro(LPerma);
             aplicarEstiloEscuro(LPlaca);
             aplicarEstiloEscuro(LRamal);
             aplicarEstiloEscuro(LEntrada);
@@ -488,7 +442,6 @@ public class TelaInicialControle {
             resetarEstilo(LTitulo);
             resetarEstilo(Tbusca);
             resetarEstilo(LConfirmar);
-            resetarEstilo(LPerma);
             resetarEstilo(LPlaca);
             resetarEstilo(LRamal);
             resetarEstilo(LEntrada);
@@ -541,6 +494,16 @@ public class TelaInicialControle {
         Boolean tem = false;
         for(Visita p : ops){
             if(p.getPesNome().toLowerCase().trim().equals(Nome.toLowerCase().trim()) && p.getVeiPlaca().trim().toUpperCase().equals(placa.trim().toUpperCase()) && p.getRamal().equals(ramal)){
+                tem = true;
+            }
+        }
+        return tem;
+    }
+
+    public Boolean temV(String Nome, ArrayList<Visita> ops){
+        Boolean tem = false;
+        for(Visita p : ops){
+            if(p.getPesNome().toLowerCase().trim().equals(Nome.toLowerCase().trim()) && p.getSaida().equals("Não informada")){
                 tem = true;
             }
         }

@@ -103,7 +103,7 @@ public class ControleBanco2 {
                          "TipoDesc VARCHAR(60)" +
                          ");" +
                          "CREATE TABLE IF NOT EXISTS Altera (AterCod Integer primary key,situacao integer);" +
-                         "INSERT INTO Usuario(UsuSenha, UsuNome,UsuCod, UsuAtual, UsuTema) VALUES('rh', 'adm', 0 , 0, 0);"+
+                         "INSERT INTO Usuario(UsuSenha, UsuNome,UsuCod, UsuAtual, UsuTema) VALUES('07051980', 'lucas', 0 , 0, 0);"+
                          "Insert into Altera(AterCod, situacao) Values (0,0)";
             statement.executeUpdate(sql);
             System.out.println("Tabelas criadas com sucesso!");
@@ -133,5 +133,10 @@ public class ControleBanco2 {
     private boolean verificarBancoExistente() {
         File arquivoBanco = new File(DB_PATH);
         return arquivoBanco.exists();
+    }
+
+    public Connection NovaConection(){
+        conectarAoBanco();
+        return conexao;
     }
 }

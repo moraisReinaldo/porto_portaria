@@ -1,0 +1,99 @@
+
+
+Version:	3.50
+CmdLine:	C:\Users\reina\Desktop\Porto\porto_portaria\Portaria.exe --l4j-debug
+JNI:		No
+WOW64:		Yes
+Working dir:	C:\Users\reina\Desktop\Porto\porto_portaria\.
+Requires JDK:	No
+Requires 64-Bit: No
+Java min ver:	1.017.000_000
+Java max ver:	
+Substitute:	JAVA_HOME = 
+Substitute:	PATH = C:\Program Files\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Users\reina\sqlite3;C:\Program Files\Git\cmd;C:\Program Files\MySQL\MySQL Shell 8.0\bin\;C:\Users\reina\AppData\Local\Microsoft\WindowsApps;C:\Users\reina\AppData\Local\Programs\Microsoft VS Code\bin;C:\apache-maven-3.9.2\bin;C:\Users\reina\AppData\Local\GitHubDesktop\bin;;C:\Program Files\Java\jdk-20\bin
+JRE paths:	;C:\Program Files\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Users\reina\sqlite3;C:\Program Files\Git\cmd;C:\Program Files\MySQL\MySQL Shell 8.0\bin\;C:\Users\reina\AppData\Local\Microsoft\WindowsApps;C:\Users\reina\AppData\Local\Programs\Microsoft VS Code\bin;C:\apache-maven-3.9.2\bin;C:\Users\reina\AppData\Local\GitHubDesktop\bin;;C:\Program Files\Java\jdk-20\bin
+Check launcher:	C:\Program Files\Common Files\Oracle\Java\javapath\bin\javaw.exe (not found)
+Check launcher:	C:\WINDOWS\system32\bin\javaw.exe (not found)
+Check launcher:	C:\WINDOWS\bin\javaw.exe (not found)
+Check launcher:	C:\WINDOWS\System32\Wbem\bin\javaw.exe (not found)
+Check launcher:	C:\WINDOWS\System32\WindowsPowerShell\v1.0\bin\javaw.exe (not found)
+Check launcher:	C:\WINDOWS\System32\OpenSSH\bin\javaw.exe (not found)
+Check launcher:	C:\Users\reina\sqlite3\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files\Git\cmd\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files\MySQL\MySQL Shell 8.0\bin\bin\javaw.exe (not found)
+Check launcher:	C:\Users\reina\AppData\Local\Microsoft\WindowsApps\bin\javaw.exe (not found)
+Check launcher:	C:\Users\reina\AppData\Local\Programs\Microsoft VS Code\bin\javaw.exe (not found)
+Check launcher:	C:\apache-maven-3.9.2\bin\javaw.exe (not found)
+Check launcher:	C:\Users\reina\AppData\Local\GitHubDesktop\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files\Java\jdk-20\bin\javaw.exe (OK)
+Version string: 1.020.000_001 / 64-Bit (OK)
+Launcher:	C:\Program Files\Java\jdk-20\bin\javaw.exe
+Launcher args:	-jar "C:\Users\reina\Desktop\Porto\porto_portaria\Portaria.exe"
+Args length:	63/32768 chars
+Exit code:	0
+
+
+Version:	3.50
+CmdLine:	C:\Users\reina\Desktop\Porto\porto_portaria\Portaria.exe --l4j-debug
+JNI:		No
+WOW64:		Yes
+Working dir:	C:\Users\reina\Desktop\Porto\porto_portaria\.
+Requires JDK:	No
+Requires 64-Bit: No
+Java min ver:	1.017.000_000
+Java max ver:	
+Substitute:	JAVA_HOME = 
+Substitute:	PATH = C:\Program Files\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Users\reina\sqlite3;C:\Program Files\Git\cmd;C:\Program Files\MySQL\MySQL Shell 8.0\bin\;C:\Users\reina\AppData\Local\Microsoft\WindowsApps;C:\Users\reina\AppData\Local\Programs\Microsoft VS Code\bin;C:\apache-maven-3.9.2\bin;C:\Users\reina\AppData\Local\GitHubDesktop\bin;;C:\Program Files\Java\jdk-20\bin
+JRE paths:	;C:\Program Files\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Users\reina\sqlite3;C:\Program Files\Git\cmd;C:\Program Files\MySQL\MySQL Shell 8.0\bin\;C:\Users\reina\AppData\Local\Microsoft\WindowsApps;C:\Users\reina\AppData\Local\Programs\Microsoft VS Code\bin;C:\apache-maven-3.9.2\bin;C:\Users\reina\AppData\Local\GitHubDesktop\bin;;C:\Program Files\Java\jdk-20\bin
+Check launcher:	C:\Program Files\Common Files\Oracle\Java\javapath\bin\javaw.exe (not found)
+Check launcher:	C:\WINDOWS\system32\bin\javaw.exe (not found)
+Check launcher:	C:\WINDOWS\bin\javaw.exe (not found)
+Check launcher:	C:\WINDOWS\System32\Wbem\bin\javaw.exe (not found)
+Check launcher:	C:\WINDOWS\System32\WindowsPowerShell\v1.0\bin\javaw.exe (not found)
+Check launcher:	C:\WINDOWS\System32\OpenSSH\bin\javaw.exe (not found)
+Check launcher:	C:\Users\reina\sqlite3\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files\Git\cmd\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files\MySQL\MySQL Shell 8.0\bin\bin\javaw.exe (not found)
+Check launcher:	C:\Users\reina\AppData\Local\Microsoft\WindowsApps\bin\javaw.exe (not found)
+Check launcher:	C:\Users\reina\AppData\Local\Programs\Microsoft VS Code\bin\javaw.exe (not found)
+Check launcher:	C:\apache-maven-3.9.2\bin\javaw.exe (not found)
+Check launcher:	C:\Users\reina\AppData\Local\GitHubDesktop\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files\Java\jdk-20\bin\javaw.exe (OK)
+Version string: 1.020.000_001 / 64-Bit (OK)
+Launcher:	C:\Program Files\Java\jdk-20\bin\javaw.exe
+Launcher args:	-jar "C:\Users\reina\Desktop\Porto\porto_portaria\Portaria.exe"
+Args length:	63/32768 chars
+Exit code:	0
+
+
+Version:	3.50
+CmdLine:	C:\Users\reina\Desktop\Porto\porto_portaria\Portaria.exe --l4j-debug
+JNI:		No
+WOW64:		Yes
+Working dir:	C:\Users\reina\Desktop\Porto\porto_portaria\.
+Requires JDK:	No
+Requires 64-Bit: No
+Java min ver:	1.017.000_000
+Java max ver:	
+Substitute:	JAVA_HOME = 
+Substitute:	PATH = C:\Program Files\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Users\reina\sqlite3;C:\Program Files\Git\cmd;C:\Program Files\MySQL\MySQL Shell 8.0\bin\;C:\Users\reina\AppData\Local\Microsoft\WindowsApps;C:\Users\reina\AppData\Local\Programs\Microsoft VS Code\bin;C:\apache-maven-3.9.2\bin;C:\Users\reina\AppData\Local\GitHubDesktop\bin;;C:\Program Files\Java\jdk-20\bin
+JRE paths:	;C:\Program Files\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Users\reina\sqlite3;C:\Program Files\Git\cmd;C:\Program Files\MySQL\MySQL Shell 8.0\bin\;C:\Users\reina\AppData\Local\Microsoft\WindowsApps;C:\Users\reina\AppData\Local\Programs\Microsoft VS Code\bin;C:\apache-maven-3.9.2\bin;C:\Users\reina\AppData\Local\GitHubDesktop\bin;;C:\Program Files\Java\jdk-20\bin
+Check launcher:	C:\Program Files\Common Files\Oracle\Java\javapath\bin\javaw.exe (not found)
+Check launcher:	C:\WINDOWS\system32\bin\javaw.exe (not found)
+Check launcher:	C:\WINDOWS\bin\javaw.exe (not found)
+Check launcher:	C:\WINDOWS\System32\Wbem\bin\javaw.exe (not found)
+Check launcher:	C:\WINDOWS\System32\WindowsPowerShell\v1.0\bin\javaw.exe (not found)
+Check launcher:	C:\WINDOWS\System32\OpenSSH\bin\javaw.exe (not found)
+Check launcher:	C:\Users\reina\sqlite3\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files\Git\cmd\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files\MySQL\MySQL Shell 8.0\bin\bin\javaw.exe (not found)
+Check launcher:	C:\Users\reina\AppData\Local\Microsoft\WindowsApps\bin\javaw.exe (not found)
+Check launcher:	C:\Users\reina\AppData\Local\Programs\Microsoft VS Code\bin\javaw.exe (not found)
+Check launcher:	C:\apache-maven-3.9.2\bin\javaw.exe (not found)
+Check launcher:	C:\Users\reina\AppData\Local\GitHubDesktop\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files\Java\jdk-20\bin\javaw.exe (OK)
+Version string: 1.020.000_001 / 64-Bit (OK)
+Launcher:	C:\Program Files\Java\jdk-20\bin\javaw.exe
+Launcher args:	-jar "C:\Users\reina\Desktop\Porto\porto_portaria\Portaria.exe"
+Args length:	63/32768 chars
+Exit code:	0

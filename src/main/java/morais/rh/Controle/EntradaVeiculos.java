@@ -241,9 +241,15 @@ public class EntradaVeiculos {
             if(Iplaca.getText()!= null && (IRamal.getText()!= null && Integer.valueOf(IRamal.getText()) <= 8177 && Integer.valueOf(IRamal.getText()) > 8000)){
                 BadiPassa.setText("Adicionar passageiro");  
                     try {
-                        Pessoa pessoa = new Pessoa(pessoasVei.size(), Inome.getText(), Idocumento.getText(), Itelefone.getText(), IRamal.getText(), Ctipo.getValue());
-                        pessoasVei.add(pessoa);
-                        gerarP(pessoasVei);
+
+                        if(temV(Inome.getText(),visitas)){
+                            BadiPassa.setStyle("-fx-background-color: #FF0000; -fx-text-fill: #FFFFFF;");
+                        }else{
+                            Pessoa pessoa = new Pessoa(pessoasVei.size(), Inome.getText(), Idocumento.getText(), Itelefone.getText(), IRamal.getText(), Ctipo.getValue());
+                            pessoasVei.add(pessoa);
+                            gerarP(pessoasVei);
+                        }
+                        
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -301,6 +307,8 @@ public class EntradaVeiculos {
                         e.printStackTrace();
                     }
                     visitas.add(visita);
+
+                    
 
                     Bcancela.setText("Finalizar");
                     Bregistro.setText("Registro Realizado!");
@@ -492,6 +500,16 @@ public class EntradaVeiculos {
 
         // Verificar se a placa corresponde ao padrão
         return matcher.matches();
+    }
+
+    public Boolean temV(String Nome, ArrayList<Visita> ops){
+        Boolean tem = false;
+        for(Visita p : ops){
+            if(p.getPesNome().toLowerCase().trim().equals(Nome.toLowerCase().trim()) && p.getSaida().equals("Não informada")){
+                tem = true;
+            }
+        }
+        return tem;
     }
 
 }

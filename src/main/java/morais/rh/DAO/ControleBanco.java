@@ -69,4 +69,9 @@ public class ControleBanco {
         VisitaDao.UpVisitas();
         AlteraDAO.atualizarSitua(1);
     }
+
+    public Connection NovaConection(){
+        conectarAoBanco();
+        return conexao;
+    }
 }
