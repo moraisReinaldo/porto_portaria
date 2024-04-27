@@ -1,7 +1,5 @@
 package morais.rh.Controle;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,9 +13,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import morais.rh.App;
 import morais.rh.DAO.ControleBanco;
-import morais.rh.DAO.ModelosDAO.AlteraDAO;
+import morais.rh.DAO.ModelosDAO.EntradaRDAO;
 import morais.rh.DAO.ModelosDAO.UsuarioDAO;
 import morais.rh.DAO.ModelosDAO.VisitaDao;
+import morais.rh.Modelo.EntradaRapida;
 import morais.rh.Modelo.Usuario;
 import morais.rh.Modelo.Visita;
 
@@ -94,46 +93,52 @@ public class TelaInicialControle {
 
 
     ArrayList<Visita> visitas = VisitaDao.buscarVisitas();
-    ArrayList<Visita> possibilidades = new ArrayList<>();
-    ArrayList<Visita> fastE = new ArrayList<>();
+    ArrayList<Visita> possibilidades = VisitaDao.buscarVisitas();    
+    ArrayList<EntradaRapida> fastE = EntradaRDAO.listarEntradasRapidas();
+    ArrayList<EntradaRapida> fastEE = EntradaRDAO.listarEntradasRapidas();
     ArrayList<Usuario> usuarios = UsuarioDAO.buscarUsuario();
     Usuario usuAtual = usuarios.get(usuarios.get(0).getAtual());
+    int ultimoC =  VisitaDao.buscarVisitasFechadas().get(VisitaDao.buscarVisitasFechadas().size() - 1).getCod();
 
     public void initialize() {
 
-        System.out.println(visitas.size());
-        for (Visita vis : visitas) {
-            
-            if (vis.getSaida().equals("Não informada")) {
-                possibilidades.add(vis);
+        if(VisitaDao.buscarVisitasFechadas().size() == 0 || VisitaDao.buscarVisitas().size() == 0){
+            if(VisitaDao.buscarVisitasFechadas().size() > VisitaDao.buscarVisitas().size()){
+                ultimoC =  VisitaDao.buscarVisitasFechadas().get(VisitaDao.buscarVisitasFechadas().size() - 1).getCod();
+            }else{
+                ultimoC =  VisitaDao.buscarVisitas().get(VisitaDao.buscarVisitasFechadas().size() - 1).getCod();
             }
-            if(visitas.size() > 100){
-                if(vis.getCod() > visitas.size() - 100 && !vis.getSaida().equals("Não informada") && temP(vis.getPesNome(), fastE, vis.getVeiPlaca(), vis.getRamal()) == false){
-                    fastE.add(vis);
-                }
-            }else if(!vis.getSaida().equals("Não informada") && temP(vis.getPesNome(), fastE, vis.getVeiPlaca(), vis.getRamal()) == false){
-                fastE.add(vis);
+        }else{
+            if(VisitaDao.buscarVisitasFechadas().get(VisitaDao.buscarVisitasFechadas().size() - 1).getCod() < VisitaDao.buscarVisitas().get(VisitaDao.buscarVisitas().size() - 1).getCod()){
+                ultimoC = VisitaDao.buscarVisitas().get(VisitaDao.buscarVisitas().size() - 1).getCod();
+            }else if(VisitaDao.buscarVisitasFechadas().get(VisitaDao.buscarVisitasFechadas().size() - 1).getCod() == VisitaDao.buscarVisitas().get(VisitaDao.buscarVisitas().size() - 1).getCod()){
+                ultimoC = VisitaDao.buscarVisitas().get(VisitaDao.buscarVisitas().size() - 1).getCod() + 2;
+            }else if(VisitaDao.buscarVisitasFechadas().get(VisitaDao.buscarVisitasFechadas().size() - 1).getCod() == 0 && VisitaDao.buscarVisitas().get(VisitaDao.buscarVisitas().size() - 1).getCod() == 0){
+                ultimoC = 0;
             }
         }
+
+        atualizarTimers(); 
+        atualizarTimers2();
         
 
         IBE.setOnKeyReleased(event -> {
             String input = IBE.getText().toLowerCase().trim();
-            fastE.clear(); // Limpa a lista para recriá-la
+            fastEE.clear(); // Limpa a lista para recriá-la
         
             if (input != null && !input.isEmpty()) {
-                for (Visita visita : visitas) {
-                    if ((visita.getPesNome().toLowerCase().startsWith(input) ||
-                        visita.getVeiPlaca().toLowerCase().startsWith(input)) && !visita.getSaida().equals("Não informada") && temP(visita.getPesNome(), fastE, visita.getVeiPlaca(), visita.getRamal()) == false){
-                        fastE.add(visita);
+                for (EntradaRapida fast : fastE) {
+                    if ((fast.getPesNome().toLowerCase().startsWith(input) ||
+                        fast.getEntPlaca().toLowerCase().startsWith(input))){
+                        fastEE.add(fast);
                     }
                 }
+                atualizarTimers2();
             } else {
-                for (Visita visita : visitas) {
-                    if (!visita.getSaida().equals("Não informada") && temP(visita.getPesNome(), fastE, visita.getVeiPlaca(), visita.getRamal()) == false) {
-                        fastE.add(visita);
-                    }
+                for (EntradaRapida ita : fastE) {
+                    fastEE.add(ita);
                 }
+                atualizarTimers2();
             }
 
         });
@@ -145,27 +150,22 @@ public class TelaInicialControle {
             if (input != null && !input.isEmpty()) {
                 for (Visita visita : visitas) {
                     if ((visita.getPesNome().toLowerCase().startsWith(input) ||
-                        visita.getVeiPlaca().toLowerCase().startsWith(input)) && visita.getSaida().equals("Não informada")) {
+                        visita.getVeiPlaca().toLowerCase().startsWith(input))) {
                         possibilidades.add(visita);
                     }
                 }
+                atualizarTimers();
             } else {
                 for (Visita vis : visitas) {
                     if (vis.getSaida().equals("Não informada")) {
                         possibilidades.add(vis);
                     }
                 }
+                atualizarTimers();
             }
 
         });
 
-        // Criação do Timeline para atualizar a cada segundo
-        Timeline timeline = new Timeline(new KeyFrame(javafx.util.Duration.seconds(1), event -> {
-            atualizarTimers(); // Função para atualizar os timers
-            atualizarTimers2();
-        }));
-        timeline.setCycleCount(Timeline.INDEFINITE);
-        timeline.play();
 
         Bpeople.setOnAction((ActionEvent event) -> {
             try {
@@ -183,6 +183,7 @@ public class TelaInicialControle {
 
         BControle.setOnAction((ActionEvent event) -> {
             try {
+                ControleBanco.Rduplicados();
                 App.setRoot("ControleV");
             } catch (IOException e) {
             }
@@ -269,21 +270,30 @@ public class TelaInicialControle {
             finaliza.setMaxWidth(100); 
             finaliza.setAlignment(Pos.CENTER);
             finaliza.setOnAction((ActionEvent event) -> {
-                VisitaDao.atualizarVisitaData(visita.getCod(), hSaiada);
+
+                try{
+                Visita visitaF = new Visita(ultimoC + 1, visita.getMotivo(), visita.getEntrada(), hSaiada, visita.getPesNome(), visita.getVeiPlaca(), visita.getTipo(), visita.getRamal(), visita.getPort());
+                VisitaDao.adicionaVisitaFechada(visitaF);
+                VisitaDao.apagarVisita(visita.getCod());
+                if(!temPE(visita.getPesNome(), fastE, visita.getVeiPlaca(), visita.getRamal())){
+                    EntradaRapida  ent = new EntradaRapida(ultimoC +1, visita.getPesNome(),visita.getTipo(), visita.getVeiPlaca(), visita.getRamal());
+                    EntradaRDAO.adicionarEntradaRapida(ent);
+                    fastE.add(ent);
+                    fastEE.add(ent);
+                }
+                ultimoC = ultimoC +1;
+                }catch (IOException e) {}
+
                 visitas = VisitaDao.buscarVisitas();
                 possibilidades.clear();
                 for (Visita vis : visitas) {
                     if (vis.getSaida().equals("Não informada")) {
                         possibilidades.add(vis);
                     }
-                    if(visitas.size() > 100){
-                        if(vis.getCod() > visitas.size() - 100 && !vis.getSaida().equals("Não informada") && temP(vis.getPesNome(), fastE, vis.getVeiPlaca(), vis.getRamal()) == false){
-                            fastE.add(vis);
-                        }
-                    }else if(!vis.getSaida().equals("Não informada") && temP(vis.getPesNome(), fastE, vis.getVeiPlaca(), vis.getRamal()) == false){
-                        fastE.add(vis);
-                    }
                 }
+
+                atualizarTimers();
+                atualizarTimers2();
             });
 
             if(visita.getCod() %2 == 0){
@@ -333,7 +343,7 @@ public class TelaInicialControle {
             
         }else{
 
-        for (Visita visita : fastE) {
+        for (EntradaRapida visita : fastEE) {
             HBox pessoa = new HBox();
             pessoa.setSpacing(10);
             pessoa.setMaxWidth(550);
@@ -348,7 +358,7 @@ public class TelaInicialControle {
             pessoa.getChildren().add(Nome);
 
             Label ramal = new Label();
-            ramal.setText(visita.getRamal());
+            ramal.setText(visita.getEntRamal());
             ramal.setMinWidth(50);
             ramal.setWrapText(true);
             ramal.setMaxWidth(40); 
@@ -356,7 +366,7 @@ public class TelaInicialControle {
             pessoa.getChildren().add(ramal);
 
             Label placa = new Label();
-            placa.setText(visita.getVeiPlaca());
+            placa.setText(visita.getEntPlaca());
             placa.setMinWidth(70);
             placa.setWrapText(true);
             placa.setMaxWidth(70); 
@@ -385,15 +395,17 @@ public class TelaInicialControle {
                     if(temV(visita.getPesNome(), possibilidades)){
                         finaliza.setStyle("-fx-background-color: #FF0000; -fx-text-fill: #FFFFFF;");
                     }else{
-                        Visita viu = new Visita(visitas.size(), visita.getMotivo(), Hentrada, "Não informada",visita.getPesNome() , visita.getVeiPlaca(), visita.getTipo(), visita.getRamal(), usuAtual.getUsuario());
+                        Visita viu = new Visita(ultimoC, " ", Hentrada, "Não informada",visita.getPesNome() , visita.getEntPlaca(), visita.getEntTipo(), visita.getEntRamal() , usuAtual.getUsuario());
                         VisitaDao.adicionaVisita(viu);
                         visitas.add(viu);
                         possibilidades.add(viu);
-                        atualizarTimers();
+                        ultimoC = ultimoC +1;
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                atualizarTimers();
+                atualizarTimers2();
             });
 
             pessoa.setStyle(
@@ -494,6 +506,16 @@ public class TelaInicialControle {
         Boolean tem = false;
         for(Visita p : ops){
             if(p.getPesNome().toLowerCase().trim().equals(Nome.toLowerCase().trim()) && p.getVeiPlaca().trim().toUpperCase().equals(placa.trim().toUpperCase()) && p.getRamal().equals(ramal)){
+                tem = true;
+            }
+        }
+        return tem;
+    }
+
+    public Boolean temPE(String Nome, ArrayList<EntradaRapida> ops, String placa, String ramal){
+        Boolean tem = false;
+        for(EntradaRapida p : ops){
+            if(p.getPesNome().toLowerCase().trim().equals(Nome.toLowerCase().trim()) && p.getEntPlaca().trim().toUpperCase().equals(placa.trim().toUpperCase()) && p.getEntRamal().equals(ramal)){
                 tem = true;
             }
         }

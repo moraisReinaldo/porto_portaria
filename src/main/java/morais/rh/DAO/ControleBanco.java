@@ -1,15 +1,25 @@
 package morais.rh.DAO;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 import morais.rh.DAO.ModelosDAO.AlteraDAO;
+import morais.rh.DAO.ModelosDAO.EntradaRDAO;
 import morais.rh.DAO.ModelosDAO.PessoaDAO;
 import morais.rh.DAO.ModelosDAO.TipoDAO;
 import morais.rh.DAO.ModelosDAO.UsuarioDAO;
 import morais.rh.DAO.ModelosDAO.VeiculoDAO;
 import morais.rh.DAO.ModelosDAO.VisitaDao;
+import morais.rh.Modelo.EntradaRapida;
+import morais.rh.Modelo.Pessoa;
+import morais.rh.Modelo.Veiculo;
 
 public class ControleBanco {
 
@@ -60,6 +70,85 @@ public class ControleBanco {
         return conexao;
     }
 
+    public static void Rduplicados(){
+
+        ArrayList<Pessoa> pessoas = PessoaDAO.buscarPessoa();
+        Set<String> nomesMaiusculos = new HashSet<>();
+        // Lista para armazenar pessoas com nomes em letras maiúsculas e sem duplicatas
+        List<Pessoa> pessoasNomesMaiusculosSemDuplicatas = new ArrayList<>();
+
+        // Iterar sobre a lista original
+        for (Pessoa pessoa : pessoas) {
+            // Verificar se o nome está todo em maiúsculas e se ainda não foi adicionado
+            if (isNomeMaiusculo(pessoa.getNome()) && nomesMaiusculos.add(pessoa.getNome())) {
+                // Se sim, adicionar à lista de pessoas com nomes em maiúsculas e sem duplicatas
+                pessoasNomesMaiusculosSemDuplicatas.add(pessoa);
+            }
+        }
+
+        for(Pessoa pe : pessoas){
+            PessoaDAO.apagarPessoa(pe.getCodigo());
+        }
+
+        for(Pessoa peo : pessoasNomesMaiusculosSemDuplicatas){
+            try {
+                PessoaDAO.adicionaPessoa(peo);
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+
+
+        ArrayList<Veiculo> veicuilos = VeiculoDAO.buscarVeiculo();
+        // Lista para armazenar pessoas com nomes em letras maiúsculas e sem duplicatas
+        List<Veiculo> VeiculosSDu = new ArrayList<>();
+        Set<String> placasOk = new HashSet<>();
+
+        // Iterar sobre a lista original
+        for (Veiculo veiculo : veicuilos) {
+            // Verificar se o nome está todo em maiúsculas e se ainda não foi adicionado
+            if (placasOk.add(veiculo.getPlaca())) {
+                // Se sim, adicionar à lista de pessoas com nomes em maiúsculas e sem duplicatas
+                VeiculosSDu.add(veiculo);
+            }
+        }
+
+        for(Veiculo ve : veicuilos){
+            VeiculoDAO.apagarVeiculo(ve.getPlaca());
+        }
+
+        for(Veiculo v : VeiculosSDu){
+            try {
+                VeiculoDAO.adicionaVeiculo(v);
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+
+        ArrayList<EntradaRapida> entradas = EntradaRDAO.listarEntradasRapidas();
+        List<EntradaRapida> EntradasOk = new ArrayList<>();
+        Set<String> nomesOk = new HashSet<>();
+
+        // Iterar sobre a lista original
+        for (EntradaRapida entrada : entradas) {
+            // Verificar se o nome está todo em maiúsculas e se ainda não foi adicionado
+            if (nomesOk.add(entrada.getPesNome())) {
+                // Se sim, adicionar à lista de pessoas com nomes em maiúsculas e sem duplicatas
+                EntradasOk.add(entrada);
+            }
+        }
+
+        for(EntradaRapida ent : entradas){
+            EntradaRDAO.deletarEntradaRapida(ent.getEntCod());
+        }
+
+        for(EntradaRapida en : EntradasOk){
+            EntradaRDAO.adicionarEntradaRapida(en);
+        }
+    }
+
     public static void AtualizarB(){
         
         TipoDAO.UpTipo();
@@ -73,5 +162,15 @@ public class ControleBanco {
     public Connection NovaConection(){
         conectarAoBanco();
         return conexao;
+    }
+
+    private static boolean isNomeMaiusculo(String nome) {
+        // Verificar se todos os caracteres do nome são maiúsculos
+        for (char c : nome.toCharArray()) {
+            if (!Character.isUpperCase(c)) {
+                return false;
+            }
+        }
+        return true;
     }
 }

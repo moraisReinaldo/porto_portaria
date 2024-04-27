@@ -8,12 +8,10 @@ import java.util.ArrayList;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -184,7 +182,8 @@ public class EntradaPessoas {
 
                     int codV;
                     if(visitas.size() == 0){
-                        codV = 0;
+                        ArrayList<Visita> vist = VisitaDao.buscarVisitasFechadas();
+                        codV = vist.size() +2;
                     }else{
                         codV = visitas.get(visitas.size()-1).getCod() + 1;
                     }
@@ -231,7 +230,7 @@ public class EntradaPessoas {
                     if(temV(Inome.getText(),visitas)){
                         Bregistro.setStyle("-fx-background-color: #FF0000; -fx-text-fill: #FFFFFF;");
                     }else{
-                        Visita visita = new Visita(codV, Imotivo.getText().trim(), entrada, "Não informada", Inome.getText().trim(), "A pé", Ctipo.getValue(), IRamal.getText(), usuAtual.getUsuario());
+                        Visita visita = new Visita(codV, Imotivo.getText().trim(), entrada, "Não informada", Inome.getText().trim().toUpperCase(), "A pé", Ctipo.getValue(), IRamal.getText(), usuAtual.getUsuario());
                         VisitaDao.adicionaVisita(visita);
                         visitas = VisitaDao.buscarVisitas();
                         Bcancela.setText("Finalizar");

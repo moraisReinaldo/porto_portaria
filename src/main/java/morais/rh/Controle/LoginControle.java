@@ -18,6 +18,7 @@ import morais.rh.App;
 import morais.rh.DAO.ControleBanco;
 import morais.rh.DAO.ModelosDAO.AlteraDAO;
 import morais.rh.DAO.ModelosDAO.UsuarioDAO;
+import morais.rh.DAO.ModelosDAO.VisitaDao;
 import morais.rh.Modelo.Usuario;
 
 public class LoginControle {
@@ -76,6 +77,7 @@ public class LoginControle {
         });
 
         Platform.runLater(() -> {
+            VisitaDao.arrumaV();
             if(AlteraDAO.buscarStatus() != 1){
                 ControleBanco.AtualizarB();
                 usus = UsuarioDAO.buscarUsuario();

@@ -3,8 +3,6 @@ package morais.rh.Controle;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -51,7 +49,7 @@ public class VisitasControle {
     @FXML
     VBox Vvisitas;
 
-    ArrayList<Visita> visitas = VisitaDao.buscarVisitas();
+    ArrayList<Visita> visitas = VisitaDao.buscarVisitasFechadas();
     ArrayList<Visita> possibilidades = new ArrayList<>();
     ArrayList<Usuario> usuarios = UsuarioDAO.buscarUsuario();
     Usuario usuAtual = usuarios.get(usuarios.get(0).getAtual());
@@ -63,6 +61,8 @@ public class VisitasControle {
                 possibilidades.add(vis);
             }
         }
+
+        gerarPessoas();
 
         INome.setOnKeyReleased(event -> {
             String input = INome.getText().toLowerCase().trim();
@@ -79,6 +79,7 @@ public class VisitasControle {
                     possibilidades.add(vis);
                 }
             }
+            gerarPessoas();
         });
 
         IRamal.setOnKeyReleased(event -> {
@@ -96,6 +97,7 @@ public class VisitasControle {
                     possibilidades.add(vis);
                 }
             }
+            gerarPessoas();
         });
 
         IPlaca.setOnKeyReleased(event -> {
@@ -113,6 +115,7 @@ public class VisitasControle {
                     possibilidades.add(vis);
                 }
             }
+            gerarPessoas();
         });
 
         BFinalizar.setOnAction((ActionEvent event) -> {
@@ -121,12 +124,6 @@ public class VisitasControle {
             } catch (IOException e) {
             }
         });
-
-        Timeline timeline = new Timeline(new KeyFrame(javafx.util.Duration.seconds(1), event -> {
-            gerarPessoas();
-        }));
-        timeline.setCycleCount(Timeline.INDEFINITE);
-        timeline.play();
 
         Platform.runLater(() -> {
             aplicarTema(usuAtual);

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import morais.rh.DAO.ControleBanco;
 import morais.rh.DAO.ControleBanco2;
+import morais.rh.Modelo.EntradaRapida;
 import morais.rh.Modelo.Visita;
 
 public class VisitaDao {
@@ -38,20 +39,8 @@ public class VisitaDao {
       
                 stmt.execute();
             }
-    
-            try (PreparedStatement stmt2 = conexao2.prepareStatement(sql)) {
-                stmt2.setInt(1, visita.getCod());
-                stmt2.setString(2, visita.getMotivo());
-                stmt2.setString(3, visita.getEntrada());
-                stmt2.setString(4, visita.getSaida());
-                stmt2.setString(5, visita.getPesNome());
-                stmt2.setString(6, visita.getTipo());
-                stmt2.setString(7, visita.getVeiPlaca());
-                stmt2.setString(8, visita.getRamal());
-                stmt2.setString(9, visita.getPort());
-      
-                stmt2.execute();
-            }
+
+            
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("Erro ao adicionar visita no banco de dados: " + e.getMessage());
@@ -101,6 +90,37 @@ public class VisitaDao {
         }
     }
     
+    public static void adicionaVisitaFechada(Visita visita) throws IOException {
+        String sql = "INSERT INTO VisitaFechada(VisCod, VisMotivo, VisEntrada, VisSaida, PesNome, VisTipo, VeiPlaca, VisRamal, VisPort) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        conexao = controle.NovaConection();
+
+        try {
+            try (PreparedStatement stmt2 = conexao.prepareStatement(sql)) {
+                stmt2.setInt(1, visita.getCod());
+                stmt2.setString(2, visita.getMotivo());
+                stmt2.setString(3, visita.getEntrada());
+                stmt2.setString(4, visita.getSaida());
+                stmt2.setString(5, visita.getPesNome());
+                stmt2.setString(6, visita.getTipo());
+                stmt2.setString(7, visita.getVeiPlaca());
+                stmt2.setString(8, visita.getRamal());
+                stmt2.setString(9, visita.getPort());
+      
+                stmt2.execute();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erro ao adicionar visita no banco de dados: " + e.getMessage());
+        } finally {
+            try {
+                if (conexao != null) {
+                    conexao.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
     public static ArrayList<Visita> buscarVisitas() {
         ResultSet resultSet = null;
         ArrayList<Visita> visitas = new ArrayList<>();
@@ -161,7 +181,6 @@ public class VisitaDao {
                     String pesNome = resultSet.getString("PesNome");
                     String tipo = resultSet.getString("VisTipo");
                     String vei = resultSet.getString("VeiPlaca");
-                    System.out.println(vei);
                     String ramal = resultSet.getString("VisRamal");
                     String port = resultSet.getString("VisPort");
         
@@ -184,10 +203,52 @@ public class VisitaDao {
                 e.printStackTrace();
             }
         }
-        System.out.println("visitas 2");
         return visitas;
     }
     
+    public static ArrayList<Visita> buscarVisitasFechadas() {
+        ResultSet resultSet = null;
+        ArrayList<Visita> visitas = new ArrayList<>();
+        conexao = controle.NovaConection();
+        
+        try {
+            try (PreparedStatement preparedStatement = conexao.prepareStatement("SELECT * FROM VisitaFechada")) {
+                resultSet = preparedStatement.executeQuery();
+    
+                while (resultSet.next()) {
+                    int cod = resultSet.getInt("VisCod");
+                    String motivo = resultSet.getString("VisMotivo");
+                    String entrada = resultSet.getString("VisEntrada");
+                    String saida = resultSet.getString("VisSaida");
+                    String pesNome = resultSet.getString("PesNome");
+                    String tipo = resultSet.getString("VisTipo");
+                    String vei = resultSet.getString("VeiPlaca");
+                    String ramal = resultSet.getString("VisRamal");
+                    String port = resultSet.getString("VisPort");
+        
+                    Visita visita = new Visita(cod, motivo, entrada, saida, pesNome, vei, tipo, ramal, port);
+                    visitas.add(visita);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erro ao buscar visitas no banco de dados: " + e.getMessage());
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (conexao != null) {
+                    conexao.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return visitas;
+    }
+
+
     public static void apagarVisita(int cod) {
         try {
             conexao = controle.NovaConection();
@@ -271,4 +332,34 @@ public class VisitaDao {
             }
         }
     }
+
+    public static void arrumaV(){
+        ArrayList<Visita> visitas = VisitaDao.buscarVisitas();
+        ArrayList<EntradaRapida> fastE = EntradaRDAO.listarEntradasRapidas();
+        for (Visita vis : visitas) {
+            if (!(vis.getSaida().equals("Não informada"))) {
+                System.out.println("Mudei");
+                try {
+                    VisitaDao.adicionaVisitaFechada(vis);
+                    VisitaDao.apagarVisita(vis.getCod());
+                } catch (IOException e) {}
+            }
+            if(vis.getCod() > visitas.size() - 100 && !vis.getSaida().equals("Não informada") && temP(vis.getPesNome(), fastE, vis.getVeiPlaca(), vis.getRamal()) == false){
+                EntradaRapida entrada = new EntradaRapida(vis.getCod(), vis.getPesNome(), vis.getTipo(), vis.getVeiPlaca(), vis.getRamal());    
+                EntradaRDAO.adicionarEntradaRapida(entrada);
+                
+            }
+        }
+    }
+
+    public static Boolean temP(String Nome, ArrayList<EntradaRapida> ops, String placa, String ramal){
+        Boolean tem = false;
+        for(EntradaRapida p : ops){
+            if(p.getPesNome().toLowerCase().trim().equals(Nome.toLowerCase().trim()) && p.getEntPlaca().trim().toUpperCase().equals(placa.trim().toUpperCase()) && p.getEntRamal().equals(ramal)){
+                tem = true;
+            }
+        }
+        return tem;
+    }
+
 }

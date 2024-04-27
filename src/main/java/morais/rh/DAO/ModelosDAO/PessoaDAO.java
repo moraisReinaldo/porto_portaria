@@ -27,7 +27,7 @@ public class PessoaDAO {
         try {
             try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
                 stmt.setInt(1, pessoa.getCodigo());
-                stmt.setString(2, pessoa.getNome());
+                stmt.setString(2, pessoa.getNome().toUpperCase().trim());
                 stmt.setString(3, pessoa.getDocumento());
                 stmt.setString(4, pessoa.getTelefone());
                 stmt.setString(5, pessoa.getRamal());
@@ -38,7 +38,7 @@ public class PessoaDAO {
     
             try (PreparedStatement stmt2 = conexao2.prepareStatement(sql)) {
                 stmt2.setInt(1, pessoa.getCodigo());
-                stmt2.setString(2, pessoa.getNome());
+                stmt2.setString(2, pessoa.getNome().toUpperCase().trim());
                 stmt2.setString(3, pessoa.getDocumento());
                 stmt2.setString(4, pessoa.getTelefone());
                 stmt2.setString(5, pessoa.getRamal());
