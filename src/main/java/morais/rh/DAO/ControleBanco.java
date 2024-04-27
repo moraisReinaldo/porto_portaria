@@ -80,7 +80,7 @@ public class ControleBanco {
         // Iterar sobre a lista original
         for (Pessoa pessoa : pessoas) {
             // Verificar se o nome está todo em maiúsculas e se ainda não foi adicionado
-            if (isNomeMaiusculo(pessoa.getNome()) && nomesMaiusculos.add(pessoa.getNome())) {
+            if (nomesMaiusculos.add(pessoa.getNome().toUpperCase())) {
                 // Se sim, adicionar à lista de pessoas com nomes em maiúsculas e sem duplicatas
                 pessoasNomesMaiusculosSemDuplicatas.add(pessoa);
             }
@@ -120,7 +120,7 @@ public class ControleBanco {
 
         for(Veiculo v : VeiculosSDu){
             try {
-                VeiculoDAO.adicionaVeiculo(v);
+                VeiculoDAO.adicionaVeiculo1(v);
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -164,13 +164,4 @@ public class ControleBanco {
         return conexao;
     }
 
-    private static boolean isNomeMaiusculo(String nome) {
-        // Verificar se todos os caracteres do nome são maiúsculos
-        for (char c : nome.toCharArray()) {
-            if (!Character.isUpperCase(c)) {
-                return false;
-            }
-        }
-        return true;
-    }
 }
