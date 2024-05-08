@@ -15,15 +15,11 @@ import morais.rh.Modelo.Visita;
 public class VisitaDao {
 
     static ControleBanco controle = new ControleBanco();
-    private static Connection conexao = controle.getConnection();
-
     static ControleBanco2 controle2 = new ControleBanco2();
-    private static Connection conexao2 = controle2.getConnection();
 
-    public static void adicionaVisita(Visita visita) throws IOException {
+    public static void adicionaVisitaSQL(Visita visita) throws IOException {
         String sql = "INSERT INTO Visita(VisCod, VisMotivo, VisEntrada, VisSaida, PesNome, VisTipo, VeiPlaca, VisRamal, VisPort) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        conexao = controle.NovaConection();
-        conexao2 = controle2.NovaConection();
+        Connection conexao = controle.NovaConection();
 
         try {
             try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
@@ -49,18 +45,15 @@ public class VisitaDao {
                 if (conexao != null) {
                     conexao.close();
                 }
-                if (conexao2 != null) {
-                    conexao2.close();
-                }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
     }
     
-    public static void adicionaVisita2(Visita visita) throws IOException {
+    public static void adicionaVisitaPortatil(Visita visita) throws IOException {
         String sql = "INSERT INTO Visita(VisCod, VisMotivo, VisEntrada, VisSaida, PesNome, VisTipo, VeiPlaca, VisRamal, VisPort) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        conexao2 = controle2.NovaConection();
+        Connection conexao2 = controle2.NovaConection();
 
         try {
             try (PreparedStatement stmt2 = conexao2.prepareStatement(sql)) {
@@ -92,7 +85,7 @@ public class VisitaDao {
     
     public static void adicionaVisitaFechada(Visita visita) throws IOException {
         String sql = "INSERT INTO VisitaFechada(VisCod, VisMotivo, VisEntrada, VisSaida, PesNome, VisTipo, VeiPlaca, VisRamal, VisPort) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        conexao = controle.NovaConection();
+        Connection conexao = controle.NovaConection();
 
         try {
             try (PreparedStatement stmt2 = conexao.prepareStatement(sql)) {
@@ -121,11 +114,10 @@ public class VisitaDao {
             }
         }
     }
-    public static ArrayList<Visita> buscarVisitas() {
+    public static ArrayList<Visita> buscarVisitasSQL() {
         ResultSet resultSet = null;
         ArrayList<Visita> visitas = new ArrayList<>();
-        conexao = controle.NovaConection();
-        
+        Connection conexao = controle.NovaConection();
         try {
             try (PreparedStatement preparedStatement = conexao.prepareStatement("SELECT * FROM Visita")) {
                 resultSet = preparedStatement.executeQuery();
@@ -164,10 +156,10 @@ public class VisitaDao {
         return visitas;
     }
     
-    public static ArrayList<Visita> buscarVisitas2() {
+    public static ArrayList<Visita> buscarVisitasPortatil() {
         ResultSet resultSet = null;
         ArrayList<Visita> visitas = new ArrayList<>();
-        conexao2 = controle2.NovaConection();
+        Connection conexao2 = controle2.NovaConection();
         
         try {
             try (PreparedStatement preparedStatement = conexao2.prepareStatement("SELECT * FROM Visita")) {
@@ -209,7 +201,7 @@ public class VisitaDao {
     public static ArrayList<Visita> buscarVisitasFechadas() {
         ResultSet resultSet = null;
         ArrayList<Visita> visitas = new ArrayList<>();
-        conexao = controle.NovaConection();
+        Connection conexao = controle.NovaConection();
         
         try {
             try (PreparedStatement preparedStatement = conexao.prepareStatement("SELECT * FROM VisitaFechada")) {
@@ -249,9 +241,9 @@ public class VisitaDao {
     }
 
 
-    public static void apagarVisita(int cod) {
-        try {
-            conexao = controle.NovaConection();
+    public static void apagarVisitaSQL(int cod) {
+        Connection conexao = controle.NovaConection();
+        try {   
             try (PreparedStatement preparedStatement = conexao.prepareStatement("DELETE FROM Visita WHERE VisCod = ?")) {
                 preparedStatement.setInt(1, cod);
                 int linhasAfetadas = preparedStatement.executeUpdate();
@@ -276,78 +268,18 @@ public class VisitaDao {
         }
     }
     
-    public static void atualizarVisitaData(int cod, String novaS) {
-        String sql = "UPDATE Visita SET VisSaida = ? WHERE VisCod = ?";
-        conexao = controle.NovaConection();
-        conexao2 = controle2.NovaConection();
-        int linhasAfetadas;
-        int linhasAfetadas2;    
-        try {
-            try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
-                stmt.setString(1, novaS);
-                stmt.setInt(2, cod);
-                linhasAfetadas = stmt.executeUpdate();
-            }
-    
-            try (PreparedStatement stmt2 = conexao2.prepareStatement(sql)) {
-                stmt2.setString(1, novaS);
-                stmt2.setInt(2, cod);
-                linhasAfetadas2 = stmt2.executeUpdate();
-            }
-    
-            if (linhasAfetadas > 0 && linhasAfetadas2 > 0) {
-                System.out.println("Visita atualizada com sucesso.");
-            } else {
-                System.out.println("Nenhuma visita foi atualizada.");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Erro ao atualizar visita no banco de dados: " + e.getMessage());
-        } finally {
-            try {
-                if (conexao != null) {
-                    conexao.close();
-                }
-                if (conexao2 != null) {
-                    conexao2.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-    
     public static void UpVisitas() {
-        ArrayList<Visita> usu1 = buscarVisitas();
-        ArrayList<Visita> usu2 = buscarVisitas2();
+        ArrayList<Visita> usu1 = buscarVisitasFechadas();
+        ArrayList<Visita> usu2 = buscarVisitasPortatil();
             
         if (usu1.size() > usu2.size()) {
             for (int i = (usu2.size() - 1); i < usu1.size(); i++) {
                 try {
                     usu2.add(usu1.get(i));
-                    adicionaVisita2(usu1.get(i));
+                    adicionaVisitaPortatil(usu1.get(i));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            }
-        }
-    }
-
-    public static void arrumaV(){
-        ArrayList<Visita> visitas = VisitaDao.buscarVisitas();
-        ArrayList<EntradaRapida> fastE = EntradaRDAO.listarEntradasRapidas();
-        for (Visita vis : visitas) {
-            if (!(vis.getSaida().equals("Não informada"))) {
-                System.out.println("Mudei");
-                try {
-                    VisitaDao.adicionaVisitaFechada(vis);
-                    VisitaDao.apagarVisita(vis.getCod());
-                } catch (IOException e) {}
-            }
-            if(vis.getCod() > visitas.size() - 100 && !vis.getSaida().equals("Não informada") && temP(vis.getPesNome(), fastE, vis.getVeiPlaca(), vis.getRamal()) == false){
-                EntradaRapida entrada = new EntradaRapida(vis.getCod(), vis.getPesNome(), vis.getTipo(), vis.getVeiPlaca(), vis.getRamal());    
-                EntradaRDAO.adicionarEntradaRapida(entrada);
-                
             }
         }
     }

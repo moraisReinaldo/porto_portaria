@@ -14,38 +14,35 @@ import morais.rh.Modelo.Pessoa;
 public class PessoaDAO {
 
     static ControleBanco controle = new ControleBanco();
-    static Connection conexao = controle.getConnection();
 
     static ControleBanco2 controle2 = new ControleBanco2();
-    static Connection conexao2 = controle2.getConnection();
 
-    public static void adicionaPessoa(Pessoa pessoa) throws IOException {
+    public static void adicionaPessoaBancoSQL(Pessoa pessoa) throws IOException {
         String sql = "INSERT INTO Pessoa(PesCodigo, PesNome, PesDoc, PesTelefone, PesRamal, PesTipo) VALUES(?, ?, ?, ?, ?,?)";
-        conexao = controle.NovaConection();
-        conexao2 = controle2.NovaConection();
+        Connection conexao = controle.NovaConection();
+        ArrayList<Pessoa> pessoas = buscarPessoaSQL();
+        Boolean pode = true;
+
+        for(Pessoa p: pessoas){
+            if(p.getNome().toUpperCase().trim().equals(pessoa.getNome().toUpperCase().trim())){
+                pode = false;
+            }
+        }
 
         try {
-            try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
-                stmt.setInt(1, pessoa.getCodigo());
-                stmt.setString(2, pessoa.getNome().toUpperCase().trim());
-                stmt.setString(3, pessoa.getDocumento());
-                stmt.setString(4, pessoa.getTelefone());
-                stmt.setString(5, pessoa.getRamal());
-                stmt.setString(6, pessoa.getTipo());
-    
-                stmt.execute();
+            if(pode){ 
+                try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
+                    stmt.setInt(1, pessoa.getCodigo());
+                    stmt.setString(2, pessoa.getNome().toUpperCase().trim());
+                    stmt.setString(3, pessoa.getDocumento());
+                    stmt.setString(4, pessoa.getTelefone());
+                    stmt.setString(5, pessoa.getRamal());
+                    stmt.setString(6, pessoa.getTipo());
+        
+                    stmt.execute();
+                }
             }
-    
-            try (PreparedStatement stmt2 = conexao2.prepareStatement(sql)) {
-                stmt2.setInt(1, pessoa.getCodigo());
-                stmt2.setString(2, pessoa.getNome().toUpperCase().trim());
-                stmt2.setString(3, pessoa.getDocumento());
-                stmt2.setString(4, pessoa.getTelefone());
-                stmt2.setString(5, pessoa.getRamal());
-                stmt2.setString(6, pessoa.getTipo());
-    
-                stmt2.execute();
-            }
+
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("Erro ao adicionar pessoa no banco de dados: " + e.getMessage());
@@ -54,6 +51,43 @@ public class PessoaDAO {
                 if (conexao != null) {
                     conexao.close();
                 }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
+
+    public static void adicionaPessoaPortatil(Pessoa pessoa) throws IOException {
+        String sql = "INSERT INTO Pessoa(PesCodigo, PesNome, PesDoc, PesTelefone, PesRamal, PesTipo) VALUES(?, ?, ?, ?, ?,?)";
+        Connection conexao2 = controle2.NovaConection();
+        ArrayList<Pessoa> pessoas = buscarPessoaSQL();
+        Boolean pode = true;
+
+        for(Pessoa p: pessoas){
+            if(p.getNome().toUpperCase().trim().equals(pessoa.getNome().toUpperCase().trim())){
+                pode = false;
+            }
+        }
+
+        try {
+            if(pode){ 
+                try (PreparedStatement stmt = conexao2.prepareStatement(sql)) {
+                    stmt.setInt(1, pessoa.getCodigo());
+                    stmt.setString(2, pessoa.getNome().toUpperCase().trim());
+                    stmt.setString(3, pessoa.getDocumento());
+                    stmt.setString(4, pessoa.getTelefone());
+                    stmt.setString(5, pessoa.getRamal());
+                    stmt.setString(6, pessoa.getTipo());
+        
+                    stmt.execute();
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erro ao adicionar visita no banco de dados: " + e.getMessage());
+        } finally {
+            try {
                 if (conexao2 != null) {
                     conexao2.close();
                 }
@@ -64,42 +98,10 @@ public class PessoaDAO {
     }
     
 
-    public static void adicionaPessoa1(Pessoa pessoa) throws IOException {
-        String sql = "INSERT INTO Pessoa(PesCodigo, PesNome, PesDoc, PesTelefone, PesRamal, PesTipo) VALUES(?, ?, ?, ?, ?,?)";
-        conexao = controle.NovaConection();
-        conexao2 = controle2.NovaConection();
-
-        try {
-            try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
-                stmt.setInt(1, pessoa.getCodigo());
-                stmt.setString(2, pessoa.getNome());
-                stmt.setString(3, pessoa.getDocumento());
-                stmt.setString(4, pessoa.getTelefone());
-                stmt.setString(5, pessoa.getRamal());
-                stmt.setString(6, pessoa.getTipo());
-    
-                stmt.execute();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Erro ao adicionar visita no banco de dados: " + e.getMessage());
-        } finally {
-            try {
-                if (conexao != null) {
-                    conexao.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-    
-
-    public static ArrayList<Pessoa> buscarPessoa() {
+    public static ArrayList<Pessoa> buscarPessoaSQL() {
         ResultSet resultSet = null;
         ArrayList<Pessoa> pessoas = new ArrayList<>();
-        conexao = controle.NovaConection();
-        conexao2 = controle2.NovaConection();
+        Connection conexao = controle.NovaConection();
 
         try {
             try (PreparedStatement preparedStatement = conexao.prepareStatement("SELECT * FROM Pessoa")) {
@@ -136,12 +138,10 @@ public class PessoaDAO {
 
     }
 
-    public static ArrayList<Pessoa> buscarPessoa2() {
+    public static ArrayList<Pessoa> buscarPessoaPortatil() {
         ResultSet resultSet = null;
         ArrayList<Pessoa> pessoas = new ArrayList<>();
-        conexao = controle.NovaConection();
-        conexao2 = controle2.NovaConection();
-
+        Connection conexao2 = controle2.NovaConection();
         try {
             try (PreparedStatement preparedStatement = conexao2.prepareStatement("SELECT * FROM Pessoa")) {
                 resultSet = preparedStatement.executeQuery();
@@ -177,11 +177,9 @@ public class PessoaDAO {
     }
     
 
-    public static void apagarPessoa(int cod) {
+    public static void apagarPessoaSQL(int cod) {
+        Connection conexao = controle.NovaConection();
         try {
-            conexao = controle.NovaConection();
-            conexao2 = controle2.NovaConection();
-
             try (PreparedStatement preparedStatement = conexao.prepareStatement("DELETE FROM Pessoa WHERE PesCodigo = ?")) {
                 preparedStatement.setInt(1, cod);
                 int linhasAfetadas = preparedStatement.executeUpdate();
@@ -207,30 +205,19 @@ public class PessoaDAO {
     }
 
     public static void UpPessoa() {
-        try {
-            ArrayList<Pessoa> pessoas1 = buscarPessoa();
-            ArrayList<Pessoa> pessoas2 = buscarPessoa2();
-            
+
+            ArrayList<Pessoa> pessoas1 = buscarPessoaSQL();
+            ArrayList<Pessoa> pessoas2 = buscarPessoaPortatil();
+            if(pessoas1.size() < pessoas2.size()){
             for (Pessoa pep : pessoas1) {
-                apagarPessoa(pep.getCodigo());
+                apagarPessoaSQL(pep.getCodigo());
             }
             for (Pessoa pep : pessoas2) {
                 try {
-                    adicionaPessoa1(pep);
+                    adicionaPessoaBancoSQL(pep);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            }
-        } finally {
-            try {
-                if (conexao != null) {
-                    conexao.close();
-                }
-                if (conexao2 != null) {
-                    conexao2.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
             }
         }
     }

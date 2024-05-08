@@ -14,16 +14,11 @@ import morais.rh.Modelo.Veiculo;
 public class VeiculoDAO {
 
     static ControleBanco controle = new ControleBanco();
-    private static Connection conexao = controle.getConnection();
-
     static ControleBanco2 controle2 = new ControleBanco2();
-    private static Connection conexao2 = controle2.getConnection();
 
-    public static void adicionaVeiculo(Veiculo veiculo) throws IOException {
+    public static void adicionaVeiculoSQL(Veiculo veiculo) throws IOException {
         String sql = "INSERT INTO Veiculo(VeiPlaca, VeiCor, VeiModelo, VeiRamal) VALUES(?, ?, ?, ?)";
-        conexao = controle.NovaConection();
-        conexao2 = controle2.NovaConection();
-        
+        Connection conexao = controle.NovaConection();
         try {
             try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
                 stmt.setString(1, veiculo.getPlaca().toUpperCase());
@@ -33,15 +28,6 @@ public class VeiculoDAO {
       
                 stmt.execute();
             }
-    
-            try (PreparedStatement stmt2 = conexao2.prepareStatement(sql)) {
-                stmt2.setString(1, veiculo.getPlaca().toUpperCase());
-                stmt2.setString(2, veiculo.getCor());
-                stmt2.setString(3, veiculo.getModelo());
-                stmt2.setString(4, veiculo.getRamal());
-      
-                stmt2.execute();
-            }
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("Erro ao adicionar veículo no banco de dados: " + e.getMessage());
@@ -50,6 +36,30 @@ public class VeiculoDAO {
                 if (conexao != null) {
                     conexao.close();
                 }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
+    public static void adicionaVeiculoPortatil(Veiculo veiculo) throws IOException {
+        String sql = "INSERT INTO Veiculo(VeiPlaca, VeiCor, VeiModelo, VeiRamal) VALUES(?, ?, ?, ?)";
+        Connection conexao2 = controle2.NovaConection();
+        
+        try {
+            try (PreparedStatement stmt = conexao2.prepareStatement(sql)) {
+                stmt.setString(1, veiculo.getPlaca().toUpperCase());
+                stmt.setString(2, veiculo.getCor());
+                stmt.setString(3, veiculo.getModelo());
+                stmt.setString(4, veiculo.getRamal());
+      
+                stmt.execute();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erro ao adicionar veículo no banco de dados: " + e.getMessage());
+        } finally {
+            try {
                 if (conexao2 != null) {
                     conexao2.close();
                 }
@@ -59,37 +69,10 @@ public class VeiculoDAO {
         }
     }
     
-    public static void adicionaVeiculo1(Veiculo veiculo) throws IOException {
-        String sql = "INSERT INTO Veiculo(VeiPlaca, VeiCor, VeiModelo, VeiRamal) VALUES(?, ?, ?, ?)";
-        conexao = controle.NovaConection();
-        
-        try {
-            try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
-                stmt.setString(1, veiculo.getPlaca().toUpperCase());
-                stmt.setString(2, veiculo.getCor());
-                stmt.setString(3, veiculo.getModelo());
-                stmt.setString(4, veiculo.getRamal());
-      
-                stmt.execute();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Erro ao adicionar veículo no banco de dados: " + e.getMessage());
-        } finally {
-            try {
-                if (conexao != null) {
-                    conexao.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-    
-    public static ArrayList<Veiculo> buscarVeiculo() {
+    public static ArrayList<Veiculo> buscarVeiculoSQL() {
         ResultSet resultSet = null;
         ArrayList<Veiculo> veiculos = new ArrayList<>();
-        conexao = controle.NovaConection();
+        Connection conexao = controle.NovaConection();
         
         try {
             try (PreparedStatement preparedStatement = conexao.prepareStatement("SELECT * FROM Veiculo")) {
@@ -124,10 +107,10 @@ public class VeiculoDAO {
         return veiculos;
     }
     
-    public static ArrayList<Veiculo> buscarVeiculo2() {
+    public static ArrayList<Veiculo> buscarVeiculoPortatil() {
         ResultSet resultSet = null;
         ArrayList<Veiculo> veiculos = new ArrayList<>();
-        conexao2 = controle2.NovaConection();
+        Connection conexao2 = controle2.NovaConection();
         
         try {
             try (PreparedStatement preparedStatement = conexao2.prepareStatement("SELECT * FROM Veiculo")) {
@@ -163,8 +146,9 @@ public class VeiculoDAO {
     }
     
     public static void apagarVeiculo(String placa) {
+        Connection conexao = controle.NovaConection();
         try {
-            conexao = controle.NovaConection();
+            
             try (PreparedStatement preparedStatement = conexao.prepareStatement("DELETE FROM Veiculo WHERE VeiPlaca = ?")) {
                 preparedStatement.setString(1, placa.toUpperCase());
     
@@ -191,30 +175,21 @@ public class VeiculoDAO {
     }
     
     public static void UpVeiculo() {
-        try {
-            ArrayList<Veiculo> usu1 = buscarVeiculo();
-            ArrayList<Veiculo> usu2 = buscarVeiculo2();
-            
+        
+            ArrayList<Veiculo> usu1 = buscarVeiculoSQL();
+            ArrayList<Veiculo> usu2 = buscarVeiculoPortatil();
+
+
+            if(usu1.size() < usu2.size()){ 
             for(Veiculo usu : usu1){
                 apagarVeiculo(usu.getPlaca());
             }
             for(Veiculo usu : usu2){
                 try {
-                    adicionaVeiculo1(usu);
+                    adicionaVeiculoSQL(usu);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            }
-        } finally {
-            try {
-                if (conexao != null) {
-                    conexao.close();
-                }
-                if (conexao2 != null) {
-                    conexao2.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
             }
         }
     }

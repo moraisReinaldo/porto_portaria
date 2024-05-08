@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+
 import morais.rh.DAO.ControleBanco;
 import morais.rh.Modelo.EntradaRapida;
 
@@ -15,6 +16,18 @@ public class EntradaRDAO {
     private static Connection conexao = controle.getConnection();
 
     public static void adicionarEntradaRapida(EntradaRapida entrada) {
+        ArrayList<EntradaRapida> entradas = listarEntradasRapidas();
+        boolean pode = true;
+
+        for(EntradaRapida e : entradas){
+            System.out.println(e.getPesNome());
+            System.out.println(entrada.getPesNome());
+            if((e.getPesNome().toUpperCase().trim().equals(entrada.getPesNome().toUpperCase().trim())) && (e.getEntPlaca().toUpperCase().trim().equals(entrada.getEntPlaca().toUpperCase().trim())) && (entrada.getEntRamal() == e.getEntRamal())){
+                pode = false;
+                System.out.println("Pode deu errado \n\n\n\n\n\n\n\n\n\n");
+            }
+        }
+        if(pode){ 
         try {
             String query = "INSERT INTO EntradaRapida (EntCod, PesNome, EntTipo, EntPlaca, EntRamal) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement statement = conexao.prepareStatement(query);
@@ -29,6 +42,7 @@ public class EntradaRDAO {
             e.printStackTrace();
         }
     }
+    }
 
     public static void deletarEntradaRapida(int codigo) {
         try {
@@ -39,6 +53,7 @@ public class EntradaRDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        System.out.println("Apagou entrada");
     }
 
     public static ArrayList<EntradaRapida> listarEntradasRapidas() {

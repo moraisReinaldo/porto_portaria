@@ -14,14 +14,11 @@ import morais.rh.Modelo.Usuario;
 public class UsuarioDAO {
 
     static ControleBanco controle = new ControleBanco();
-    private static Connection conexao = controle.getConnection();
-
     static ControleBanco2 controle2 = new ControleBanco2();
-    private static Connection conexao2 = controle2.getConnection();
 
-    public static void adicionaUsuario(Usuario usuario) throws IOException {
+    public static void adicionaUsuarioSQL(Usuario usuario) throws IOException {
         String sql = "INSERT INTO Usuario(UsuCod, UsuSenha, UsuNome, UsuAtual, UsuTema) VALUES(?, ?, ?, 0, 0)";
-        conexao = controle.NovaConection();
+        Connection conexao = controle.NovaConection();
     
         try {
             try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
@@ -45,10 +42,10 @@ public class UsuarioDAO {
         }
     }
     
-    public static ArrayList<Usuario> buscarUsuario() {
+    public static ArrayList<Usuario> buscarUsuarioSQL() {
         ResultSet resultSet = null;
         ArrayList<Usuario> usuarios = new ArrayList<>();
-        conexao = controle.NovaConection();
+        Connection conexao = controle.NovaConection();
     
         try {
             try (PreparedStatement preparedStatement = conexao.prepareStatement("SELECT * FROM Usuario")) {
@@ -83,10 +80,10 @@ public class UsuarioDAO {
         return usuarios;
     }
     
-    public static ArrayList<Usuario> buscarUsuario2() {
+    public static ArrayList<Usuario> buscarUsuarioPortatil() {
         ResultSet resultSet = null;
         ArrayList<Usuario> usuarios = new ArrayList<>();
-        conexao2 = controle2.NovaConection();
+        Connection conexao2 = controle2.NovaConection();
     
         try {
             try (PreparedStatement preparedStatement = conexao2.prepareStatement("SELECT * FROM Usuario")) {
@@ -121,11 +118,10 @@ public class UsuarioDAO {
         return usuarios;
     }
     
-    public static void apagarUsuario(int cod) {
+    public static void apagarUsuarioSQL(int cod) {
         if (cod != 0) {
+            Connection conexao = controle.NovaConection();
             try {
-                conexao = controle.NovaConection();
-
                 try (PreparedStatement preparedStatement = conexao.prepareStatement("DELETE FROM Usuario WHERE UsuCod = ?")) {
                     preparedStatement.setInt(1, cod);
     
@@ -154,7 +150,7 @@ public class UsuarioDAO {
     
     public static void atualizarTema(int cod, int tema) {
         String sql = "UPDATE Usuario SET UsuTema = ? WHERE UsuCod = ?";
-        conexao = controle.NovaConection();
+        Connection conexao = controle.NovaConection();
         
         try {
             try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
@@ -185,7 +181,7 @@ public class UsuarioDAO {
     
     public static void atualizarAtual(int cod, int novoA) {
         String sql = "UPDATE Usuario SET UsuAtual = ? WHERE UsuCod = ?";
-        conexao = controle.NovaConection();
+        Connection conexao = controle.NovaConection();
         
         try {
             try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
@@ -215,33 +211,21 @@ public class UsuarioDAO {
     }
     
     public static void UpUsuario() {
-        try {
-            ArrayList<Usuario> usu1 = buscarUsuario();
-            ArrayList<Usuario> usu2 = buscarUsuario2();
+        
+            ArrayList<Usuario> usu1 = buscarUsuarioSQL();
+            ArrayList<Usuario> usu2 = buscarUsuarioPortatil();
     
             for (Usuario usu : usu1) {
-                apagarUsuario(usu.getCod());
+                apagarUsuarioSQL(usu.getCod());
             }
             for (Usuario usu : usu2) {
                 try {
                     if (usu.getCod() != 0) {
-                        adicionaUsuario(usu);
+                        adicionaUsuarioSQL(usu);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
-        } finally {
-            try {
-                if (conexao != null) {
-                    conexao.close();
-                }
-                if (conexao2 != null) {
-                    conexao2.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
     }
 }

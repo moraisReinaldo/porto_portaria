@@ -92,28 +92,28 @@ public class TelaInicialControle {
     Button BControle;
 
 
-    ArrayList<Visita> visitas = VisitaDao.buscarVisitas();
-    ArrayList<Visita> possibilidades = VisitaDao.buscarVisitas();    
+    ArrayList<Visita> visitas = VisitaDao.buscarVisitasSQL();
+    ArrayList<Visita> possibilidades = VisitaDao.buscarVisitasSQL();    
     ArrayList<EntradaRapida> fastE = EntradaRDAO.listarEntradasRapidas();
     ArrayList<EntradaRapida> fastEE = EntradaRDAO.listarEntradasRapidas();
-    ArrayList<Usuario> usuarios = UsuarioDAO.buscarUsuario();
+    ArrayList<Usuario> usuarios = UsuarioDAO.buscarUsuarioSQL();
     Usuario usuAtual = usuarios.get(usuarios.get(0).getAtual());
     int ultimoC =  VisitaDao.buscarVisitasFechadas().get(VisitaDao.buscarVisitasFechadas().size() - 1).getCod();
 
     public void initialize() {
 
-        if(VisitaDao.buscarVisitasFechadas().size() == 0 || VisitaDao.buscarVisitas().size() == 0){
-            if(VisitaDao.buscarVisitasFechadas().size() > VisitaDao.buscarVisitas().size()){
+        if(VisitaDao.buscarVisitasFechadas().size() == 0 || VisitaDao.buscarVisitasSQL().size() == 0){
+            if(VisitaDao.buscarVisitasFechadas().size() > VisitaDao.buscarVisitasSQL().size()){
                 ultimoC =  VisitaDao.buscarVisitasFechadas().get(VisitaDao.buscarVisitasFechadas().size() - 1).getCod();
             }else{
-                ultimoC =  VisitaDao.buscarVisitas().get(VisitaDao.buscarVisitasFechadas().size() - 1).getCod();
+                ultimoC =  VisitaDao.buscarVisitasSQL().get(VisitaDao.buscarVisitasFechadas().size() - 1).getCod();
             }
         }else{
-            if(VisitaDao.buscarVisitasFechadas().get(VisitaDao.buscarVisitasFechadas().size() - 1).getCod() < VisitaDao.buscarVisitas().get(VisitaDao.buscarVisitas().size() - 1).getCod()){
-                ultimoC = VisitaDao.buscarVisitas().get(VisitaDao.buscarVisitas().size() - 1).getCod();
-            }else if(VisitaDao.buscarVisitasFechadas().get(VisitaDao.buscarVisitasFechadas().size() - 1).getCod() == VisitaDao.buscarVisitas().get(VisitaDao.buscarVisitas().size() - 1).getCod()){
-                ultimoC = VisitaDao.buscarVisitas().get(VisitaDao.buscarVisitas().size() - 1).getCod() + 2;
-            }else if(VisitaDao.buscarVisitasFechadas().get(VisitaDao.buscarVisitasFechadas().size() - 1).getCod() == 0 && VisitaDao.buscarVisitas().get(VisitaDao.buscarVisitas().size() - 1).getCod() == 0){
+            if(VisitaDao.buscarVisitasFechadas().get(VisitaDao.buscarVisitasFechadas().size() - 1).getCod() < VisitaDao.buscarVisitasSQL().get(VisitaDao.buscarVisitasSQL().size() - 1).getCod()){
+                ultimoC = VisitaDao.buscarVisitasSQL().get(VisitaDao.buscarVisitasSQL().size() - 1).getCod();
+            }else if(VisitaDao.buscarVisitasFechadas().get(VisitaDao.buscarVisitasFechadas().size() - 1).getCod() == VisitaDao.buscarVisitasSQL().get(VisitaDao.buscarVisitasSQL().size() - 1).getCod()){
+                ultimoC = VisitaDao.buscarVisitasSQL().get(VisitaDao.buscarVisitasSQL().size() - 1).getCod() + 2;
+            }else if(VisitaDao.buscarVisitasFechadas().get(VisitaDao.buscarVisitasFechadas().size() - 1).getCod() == 0 && VisitaDao.buscarVisitasSQL().get(VisitaDao.buscarVisitasSQL().size() - 1).getCod() == 0){
                 ultimoC = 0;
             }
         }
@@ -265,26 +265,34 @@ public class TelaInicialControle {
             String hSaiada = data + " - " + HoraE;
 
             Button finaliza = new Button();
-            finaliza.setText("Registrar");
+            finaliza.setText("Saida");
             finaliza.setMinWidth(100);
             finaliza.setMaxWidth(100); 
             finaliza.setAlignment(Pos.CENTER);
             finaliza.setOnAction((ActionEvent event) -> {
 
-                try{
                 Visita visitaF = new Visita(ultimoC + 1, visita.getMotivo(), visita.getEntrada(), hSaiada, visita.getPesNome(), visita.getVeiPlaca(), visita.getTipo(), visita.getRamal(), visita.getPort());
-                VisitaDao.adicionaVisitaFechada(visitaF);
-                VisitaDao.apagarVisita(visita.getCod());
-                if(!temPE(visita.getPesNome(), fastE, visita.getVeiPlaca(), visita.getRamal())){
+                
+                try {
+                    VisitaDao.adicionaVisitaFechada(visitaF);
+                    VisitaDao.apagarVisitaSQL(visita.getCod());
+                } catch (Exception e) {
+                }
+
+                try {
+                    VisitaDao.adicionaVisitaPortatil(visitaF);
+                } catch (Exception e) {
+                }
+                
+                if(!temPE(visita.getPesNome().toUpperCase().trim(), fastE, visita.getVeiPlaca().toUpperCase().trim(), visita.getRamal().trim())){
                     EntradaRapida  ent = new EntradaRapida(ultimoC +1, visita.getPesNome(),visita.getTipo(), visita.getVeiPlaca(), visita.getRamal());
                     EntradaRDAO.adicionarEntradaRapida(ent);
                     fastE.add(ent);
                     fastEE.add(ent);
                 }
                 ultimoC = ultimoC +1;
-                }catch (IOException e) {}
 
-                visitas = VisitaDao.buscarVisitas();
+                visitas = VisitaDao.buscarVisitasSQL();
                 possibilidades.clear();
                 for (Visita vis : visitas) {
                     if (vis.getSaida().equals("Não informada")) {
@@ -396,7 +404,7 @@ public class TelaInicialControle {
                         finaliza.setStyle("-fx-background-color: #FF0000; -fx-text-fill: #FFFFFF;");
                     }else{
                         Visita viu = new Visita(ultimoC, " ", Hentrada, "Não informada",visita.getPesNome() , visita.getEntPlaca(), visita.getEntTipo(), visita.getEntRamal() , usuAtual.getUsuario());
-                        VisitaDao.adicionaVisita(viu);
+                        VisitaDao.adicionaVisitaSQL(viu);
                         visitas.add(viu);
                         possibilidades.add(viu);
                         ultimoC = ultimoC +1;
@@ -515,7 +523,7 @@ public class TelaInicialControle {
     public Boolean temPE(String Nome, ArrayList<EntradaRapida> ops, String placa, String ramal){
         Boolean tem = false;
         for(EntradaRapida p : ops){
-            if(p.getPesNome().toLowerCase().trim().equals(Nome.toLowerCase().trim()) && p.getEntPlaca().trim().toUpperCase().equals(placa.trim().toUpperCase()) && p.getEntRamal().equals(ramal)){
+            if(p.getPesNome().toUpperCase().trim().equals(Nome.toUpperCase().trim()) && p.getEntPlaca().trim().toUpperCase().equals(placa.trim().toUpperCase()) && p.getEntRamal().equals(ramal)){
                 tem = true;
             }
         }

@@ -5,10 +5,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
 
 import morais.rh.DAO.ModelosDAO.AlteraDAO;
 import morais.rh.DAO.ModelosDAO.EntradaRDAO;
@@ -19,7 +15,6 @@ import morais.rh.DAO.ModelosDAO.VeiculoDAO;
 import morais.rh.DAO.ModelosDAO.VisitaDao;
 import morais.rh.Modelo.EntradaRapida;
 import morais.rh.Modelo.Pessoa;
-import morais.rh.Modelo.Veiculo;
 
 public class ControleBanco {
 
@@ -72,80 +67,54 @@ public class ControleBanco {
 
     public static void Rduplicados(){
 
-        ArrayList<Pessoa> pessoas = PessoaDAO.buscarPessoa();
-        Set<String> nomesMaiusculos = new HashSet<>();
+        ArrayList<Pessoa> pessoas = PessoaDAO.buscarPessoaSQL();
+        ArrayList<Pessoa> SemDupli = new ArrayList<>();
         // Lista para armazenar pessoas com nomes em letras maiúsculas e sem duplicatas
-        List<Pessoa> pessoasNomesMaiusculosSemDuplicatas = new ArrayList<>();
-
+        SemDupli.add(pessoas.get(0));
         // Iterar sobre a lista original
         for (Pessoa pessoa : pessoas) {
-            // Verificar se o nome está todo em maiúsculas e se ainda não foi adicionado
-            if (nomesMaiusculos.add(pessoa.getNome().toUpperCase())) {
-                // Se sim, adicionar à lista de pessoas com nomes em maiúsculas e sem duplicatas
-                pessoasNomesMaiusculosSemDuplicatas.add(pessoa);
+            for(Pessoa s : SemDupli){
+                if(!(pessoa.getNome().equals(s.getNome()))){
+                    SemDupli.add(pessoa);
+                }
             }
         }
 
-        for(Pessoa pe : pessoas){
-            PessoaDAO.apagarPessoa(pe.getCodigo());
-        }
-
-        for(Pessoa peo : pessoasNomesMaiusculosSemDuplicatas){
-            try {
-                PessoaDAO.adicionaPessoa(peo);
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+        if(pessoas.size() > SemDupli.size()){
+            for(Pessoa peo : pessoas){
+                PessoaDAO.apagarPessoaSQL(peo.getCodigo());
             }
-        }
-
-
-        ArrayList<Veiculo> veicuilos = VeiculoDAO.buscarVeiculo();
-        // Lista para armazenar pessoas com nomes em letras maiúsculas e sem duplicatas
-        List<Veiculo> VeiculosSDu = new ArrayList<>();
-        Set<String> placasOk = new HashSet<>();
-
-        // Iterar sobre a lista original
-        for (Veiculo veiculo : veicuilos) {
-            // Verificar se o nome está todo em maiúsculas e se ainda não foi adicionado
-            if (placasOk.add(veiculo.getPlaca())) {
-                // Se sim, adicionar à lista de pessoas com nomes em maiúsculas e sem duplicatas
-                VeiculosSDu.add(veiculo);
-            }
-        }
-
-        for(Veiculo ve : veicuilos){
-            VeiculoDAO.apagarVeiculo(ve.getPlaca());
-        }
-
-        for(Veiculo v : VeiculosSDu){
-            try {
-                VeiculoDAO.adicionaVeiculo1(v);
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+            for(Pessoa peo : SemDupli){
+                try {
+                    PessoaDAO.adicionaPessoaBancoSQL(peo);
+                } catch (IOException e) {
+                };
             }
         }
 
         ArrayList<EntradaRapida> entradas = EntradaRDAO.listarEntradasRapidas();
-        List<EntradaRapida> EntradasOk = new ArrayList<>();
-        Set<String> nomesOk = new HashSet<>();
+        ArrayList<EntradaRapida> EntradasOk = new ArrayList<>();
 
-        // Iterar sobre a lista original
+        EntradasOk.add(entradas.get(0));
+
         for (EntradaRapida entrada : entradas) {
             // Verificar se o nome está todo em maiúsculas e se ainda não foi adicionado
-            if (nomesOk.add(entrada.getPesNome())) {
-                // Se sim, adicionar à lista de pessoas com nomes em maiúsculas e sem duplicatas
-                EntradasOk.add(entrada);
+            for(EntradaRapida e : EntradasOk){
+                if(!(e.getPesNome().toUpperCase().trim().equals(entrada.getPesNome().toUpperCase().trim()) || e.getEntPlaca().toUpperCase().trim().equals(entrada.getEntPlaca().toUpperCase().trim()) || entrada.getEntRamal() == e.getEntRamal())){
+                    EntradasOk.add(entrada);
+                }
             }
         }
 
-        for(EntradaRapida ent : entradas){
-            EntradaRDAO.deletarEntradaRapida(ent.getEntCod());
-        }
+        if(EntradasOk.size() < entradas.size()){
+            for(EntradaRapida ent : entradas){
+                EntradaRDAO.deletarEntradaRapida(ent.getEntCod());
+            }
+    
+            for(EntradaRapida en : EntradasOk){
+                EntradaRDAO.adicionarEntradaRapida(en);
+            }
 
-        for(EntradaRapida en : EntradasOk){
-            EntradaRDAO.adicionarEntradaRapida(en);
         }
     }
 

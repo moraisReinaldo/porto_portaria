@@ -78,20 +78,18 @@ public class EntradaPessoas {
     Label Lmotivo;
 
 
-    ArrayList<Tipo> tipos = TipoDAO.buscarTipo1();
-    ArrayList<Pessoa> pessoas =  PessoaDAO.buscarPessoa();
-    ArrayList<Visita> visitas = VisitaDao.buscarVisitas();
-    ArrayList<Usuario> usuarios = UsuarioDAO.buscarUsuario();
+    ArrayList<Tipo> tipos = TipoDAO.buscarTipoSQL();
+    ArrayList<Pessoa> pessoas =  PessoaDAO.buscarPessoaSQL();
+    ArrayList<Visita> visitas = VisitaDao.buscarVisitasSQL();
+    ArrayList<Usuario> usuarios = UsuarioDAO.buscarUsuarioSQL();
     Usuario usuAtual = usuarios.get(usuarios.get(0).getAtual());
 
     public void initialize(){
-
 
         for(Tipo tipo : tipos){
             Ctipo.getItems().add(tipo.getDesc());
         }
 
-        
         ArrayList<String> possibilidades = new ArrayList<>();
         for(Pessoa pessoa : pessoas){
             possibilidades.add(pessoa.getDocumento());
@@ -148,8 +146,6 @@ public class EntradaPessoas {
             }
         });
 
-
-
         Bregistro.setOnAction((ActionEvent event) ->{
             if(temNoBancoP(Inome.getText()) == false && Integer.valueOf(IRamal.getText()) > 8000 && Integer.valueOf(IRamal.getText()) <= 8177){
                 try {
@@ -163,8 +159,9 @@ public class EntradaPessoas {
                     
                     
                     Pessoa pessNo = new Pessoa(cod, Inome.getText().trim(),Idocumento.getText().trim(), Itelefone.getText().trim(), IRamal.getText(), Ctipo.getValue());
-                    PessoaDAO.adicionaPessoa(pessNo);
-                    pessoas = PessoaDAO.buscarPessoa();
+                    PessoaDAO.adicionaPessoaBancoSQL(pessNo);
+                    PessoaDAO.adicionaPessoaPortatil(pessNo);
+                    pessoas = PessoaDAO.buscarPessoaSQL();
 
                     if(Imotivo.getText() == null){
                             Imotivo.setText( "  ");
@@ -191,15 +188,12 @@ public class EntradaPessoas {
                         Bregistro.setStyle("-fx-background-color: #FF0000; -fx-text-fill: #FFFFFF;");
                     }else{
                         Visita visita = new Visita(codV, Imotivo.getText().trim(), entrada, "Não informada", Inome.getText().trim(), "A pé", Ctipo.getValue(), IRamal.getText(), usuAtual.getUsuario());
-                        VisitaDao.adicionaVisita(visita);
-                        visitas = VisitaDao.buscarVisitas();
+                        VisitaDao.adicionaVisitaSQL(visita);
+                        visitas = VisitaDao.buscarVisitasSQL();
                     }
-
-                    
 
                     Bcancela.setText("Finalizar");
                     Lconfirma.setText("Registro Realizado!");
-
 
                 } catch (IOException e) {   
                     e.printStackTrace();
@@ -231,8 +225,8 @@ public class EntradaPessoas {
                         Bregistro.setStyle("-fx-background-color: #FF0000; -fx-text-fill: #FFFFFF;");
                     }else{
                         Visita visita = new Visita(codV, Imotivo.getText().trim(), entrada, "Não informada", Inome.getText().trim().toUpperCase(), "A pé", Ctipo.getValue(), IRamal.getText(), usuAtual.getUsuario());
-                        VisitaDao.adicionaVisita(visita);
-                        visitas = VisitaDao.buscarVisitas();
+                        VisitaDao.adicionaVisitaSQL(visita);
+                        visitas = VisitaDao.buscarVisitasSQL();
                         Bcancela.setText("Finalizar");
                         Lconfirma.setText("Registro Realizado!");
                     }
@@ -258,7 +252,7 @@ public class EntradaPessoas {
     }
 
     public Boolean temNoBancoP(String Nome){
-        ArrayList<Pessoa> pessoasBanco = PessoaDAO.buscarPessoa();
+        ArrayList<Pessoa> pessoasBanco = PessoaDAO.buscarPessoaSQL();
         Boolean tem = false;
         for(Pessoa p : pessoasBanco){
             if(p.getNome().toLowerCase().trim().equals(Nome.toLowerCase().trim())){

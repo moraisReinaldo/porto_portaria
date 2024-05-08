@@ -14,14 +14,11 @@ import morais.rh.Modelo.Tipo;
 public class TipoDAO {
 
     static ControleBanco controle = new ControleBanco();
-    private static Connection conexao = controle.getConnection();
-
     static ControleBanco2 controle2 = new ControleBanco2();
-    private static Connection conexao2 = controle2.getConnection();
 
-    public static void adicionaTipo(Tipo tipo) throws IOException {
+    public static void adicionaTipoSQL(Tipo tipo) throws IOException {
         String sql = "INSERT INTO Tipo(TipoCod, TipoDesc) VALUES(?, ?)";
-        conexao = controle.NovaConection();
+        Connection conexao = controle.NovaConection();
 
         try {
             try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
@@ -44,10 +41,10 @@ public class TipoDAO {
         }
     }
     
-    public static ArrayList<Tipo> buscarTipo1() {
+    public static ArrayList<Tipo> buscarTipoSQL() {
         ResultSet resultSet = null;
         ArrayList<Tipo> tipos = new ArrayList<>();
-        conexao = controle.NovaConection();
+        Connection conexao = controle.NovaConection();
     
         try {
             try (PreparedStatement preparedStatement = conexao.prepareStatement("SELECT * FROM Tipo")) {
@@ -79,10 +76,10 @@ public class TipoDAO {
         return tipos;
     }
     
-    public static ArrayList<Tipo> buscarTipo2() {
+    public static ArrayList<Tipo> buscarTipoPortatil() {
         ResultSet resultSet = null;
         ArrayList<Tipo> tipos = new ArrayList<>();
-        conexao2 = controle2.NovaConection();
+        Connection conexao2 = controle2.NovaConection();
     
         try {
             try (PreparedStatement preparedStatement = conexao2.prepareStatement("SELECT * FROM Tipo")) {
@@ -114,10 +111,9 @@ public class TipoDAO {
         return tipos;
     }
     
-    public static void apagarTipo(int cod) {
+    public static void apagarTipoSQL(int cod) {
+        Connection conexao = controle.NovaConection();
         try {
-            conexao = controle.NovaConection();
-
             try (PreparedStatement preparedStatement = conexao.prepareStatement("DELETE FROM Tipo WHERE TipoCod = ?")) {
                 preparedStatement.setInt(1, cod);
     
@@ -144,31 +140,18 @@ public class TipoDAO {
     }
     
     public static void UpTipo() {
-        try {
-            ArrayList<Tipo> tipos1 = buscarTipo1();
-            ArrayList<Tipo> tipos2 = buscarTipo2();
+            ArrayList<Tipo> tipos1 = buscarTipoSQL();
+            ArrayList<Tipo> tipos2 = buscarTipoPortatil();
     
             for (Tipo tip : tipos1) {
-                apagarTipo(tip.getCod());
+                apagarTipoSQL(tip.getCod());
             }
             for (Tipo tip : tipos2) {
                 try {
-                    adicionaTipo(tip);
+                    adicionaTipoSQL(tip);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
-        } finally {
-            try {
-                if (conexao != null) {
-                    conexao.close();
-                }
-                if (conexao2 != null) {
-                    conexao2.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
     }
 }

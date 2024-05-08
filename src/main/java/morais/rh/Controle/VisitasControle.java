@@ -51,7 +51,7 @@ public class VisitasControle {
 
     ArrayList<Visita> visitas = VisitaDao.buscarVisitasFechadas();
     ArrayList<Visita> possibilidades = new ArrayList<>();
-    ArrayList<Usuario> usuarios = UsuarioDAO.buscarUsuario();
+    ArrayList<Usuario> usuarios = UsuarioDAO.buscarUsuarioSQL();
     Usuario usuAtual = usuarios.get(usuarios.get(0).getAtual());
     
     public void initialize() {

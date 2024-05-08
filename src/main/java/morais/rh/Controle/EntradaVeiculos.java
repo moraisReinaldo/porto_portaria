@@ -122,12 +122,12 @@ public class EntradaVeiculos {
     @FXML 
     Label Lenvio;
 
-    ArrayList<Tipo> tipos = TipoDAO.buscarTipo1();
-    ArrayList<Pessoa> pessoas =  PessoaDAO.buscarPessoa();
-    ArrayList<Visita> visitas = VisitaDao.buscarVisitas();
-    ArrayList<Veiculo> veiculos = VeiculoDAO.buscarVeiculo();
+    ArrayList<Tipo> tipos = TipoDAO.buscarTipoSQL();
+    ArrayList<Pessoa> pessoas =  PessoaDAO.buscarPessoaSQL();
+    ArrayList<Visita> visitas = VisitaDao.buscarVisitasSQL();
+    ArrayList<Veiculo> veiculos = VeiculoDAO.buscarVeiculoSQL();
     ArrayList<Pessoa> pessoasVei = new ArrayList<>();
-    ArrayList<Usuario> usuarios = UsuarioDAO.buscarUsuario();
+    ArrayList<Usuario> usuarios = UsuarioDAO.buscarUsuarioSQL();
     Usuario usuAtual = usuarios.get(usuarios.get(0).getAtual());
 
     public void initialize(){
@@ -136,8 +136,7 @@ public class EntradaVeiculos {
         for(Tipo tipo : tipos){
             tiposO.add(tipo.getDesc());
         }
-        Ctipo.setItems(tiposO);
-                
+        Ctipo.setItems(tiposO);       
         //Pessoa by Nome;
         ArrayList<String> possibilidadesP = new ArrayList<>();
         for(Pessoa pessoa : pessoas){
@@ -263,7 +262,8 @@ public class EntradaVeiculos {
             if(temNoBancoV(Iplaca.getText()) == false){
                 Veiculo vei = new Veiculo(Iplaca.getText().toUpperCase(), Icor.getText(), Imodelo.getText(), IRamal.getText());
                 try {
-                    VeiculoDAO.adicionaVeiculo(vei);
+                    VeiculoDAO.adicionaVeiculoSQL(vei);
+                    VeiculoDAO.adicionaVeiculoPortatil(vei);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -273,7 +273,8 @@ public class EntradaVeiculos {
                     if(temNoBancoP(peo.getNome()) == false){
                         peo.setCodigo(pessoas.size());
                         try {
-                            PessoaDAO.adicionaPessoa(peo);
+                            PessoaDAO.adicionaPessoaBancoSQL(peo);
+                            PessoaDAO.adicionaPessoaPortatil(peo);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -302,7 +303,7 @@ public class EntradaVeiculos {
 
                     Visita visita = new Visita(codV, Imotivo.getText().trim(), entrada, "Não informada", peo.getNome(), Iplaca.getText().toUpperCase(), peo.getTipo(), IRamal.getText(), usuAtual.getUsuario());
                     try {
-                        VisitaDao.adicionaVisita(visita);
+                        VisitaDao.adicionaVisitaSQL(visita);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -357,7 +358,7 @@ public class EntradaVeiculos {
     }
 
     public Boolean temNoBancoP(String Nome){
-        ArrayList<Pessoa> pessoasBanco = PessoaDAO.buscarPessoa();
+        ArrayList<Pessoa> pessoasBanco = PessoaDAO.buscarPessoaSQL();
         Boolean tem = false;
         for(Pessoa p : pessoasBanco){
             if(p.getNome().toLowerCase().trim().equals(Nome.toLowerCase().trim())){
@@ -369,7 +370,7 @@ public class EntradaVeiculos {
     }
 
     public Boolean temNoBancoV(String Placa){
-        ArrayList<Veiculo> VeiculosBanco = VeiculoDAO.buscarVeiculo();
+        ArrayList<Veiculo> VeiculosBanco = VeiculoDAO.buscarVeiculoSQL();
         Boolean tem = false;
         for(Veiculo v : VeiculosBanco){
             if(v.getPlaca().toUpperCase().trim().equals(Placa.toUpperCase().trim())){
