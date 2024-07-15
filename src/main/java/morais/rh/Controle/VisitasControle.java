@@ -1,7 +1,17 @@
 package morais.rh.Controle;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -15,6 +25,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import morais.rh.App;
+import morais.rh.DAO.ControleBanco;
 import morais.rh.DAO.ModelosDAO.UsuarioDAO;
 import morais.rh.DAO.ModelosDAO.VisitaDao;
 import morais.rh.Modelo.Usuario;
@@ -48,6 +59,9 @@ public class VisitasControle {
 
     @FXML
     VBox Vvisitas;
+
+    @FXML
+    Button Bplan;
 
     ArrayList<Visita> visitas = VisitaDao.buscarVisitasFechadas();
     ArrayList<Visita> possibilidades = new ArrayList<>();
@@ -125,6 +139,26 @@ public class VisitasControle {
             }
         });
 
+        Bplan.setOnAction((ActionEvent event) -> {
+            ControleBanco controle = new ControleBanco();
+            Connection conexao = controle.NovaConection();
+            List<String> TABLES = Arrays.asList("Usuario", "Veiculo", "Pessoa", "Visita", "Tipo", "VisitaFechada", "EntradaRapida");
+
+        try (Workbook workbook = new XSSFWorkbook()){
+
+            for (String table : TABLES) {
+                createSheetForTable(conexao, workbook, table);
+            }
+
+            try (FileOutputStream fileOut = new FileOutputStream("Relatorio.xlsx")) {
+                workbook.write(fileOut);
+            }
+            Bplan.setText("Planilha Gerada");
+
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+        }});
+
         Platform.runLater(() -> {
             aplicarTema(usuAtual);
         });
@@ -143,6 +177,7 @@ public class VisitasControle {
             aplicarEstiloEscuro(IPlaca);
             aplicarEstiloEscuro(IRamal);
             aplicarEstiloEscuro(BFinalizar);
+            aplicarEstiloEscuro(Bplan);
 
         } else {
             // Configuração de cores para o tema claro (pode ajustar conforme necessário)
@@ -155,6 +190,7 @@ public class VisitasControle {
             resetarEstilo(IPlaca);
             resetarEstilo(IRamal);
             resetarEstilo(BFinalizar);
+            resetarEstilo(Bplan);
         }
     }
 
@@ -191,28 +227,29 @@ public class VisitasControle {
             dados.setSpacing(20);
             dados.setMinHeight(30);
             dados.setMinWidth(890);
-            dados.setAlignment(Pos.CENTER); // Centraliza verticalmente
+            dados.setAlignment(Pos.CENTER_LEFT); // Centraliza verticalmente
 
             Label NomeD = new Label();
             NomeD.setText("Nome e tipo");
             NomeD.setWrapText(true);
             NomeD.setAlignment(Pos.CENTER);
+            NomeD.setMinWidth(300);
             dados.getChildren().add(NomeD);
 
             Label entradaD = new Label();
             entradaD.setText("Entrada");
-            entradaD.setMinWidth(70);
+            entradaD.setMinWidth(190);
             entradaD.setWrapText(true);
-            entradaD.setMaxWidth(70);
+            entradaD.setMaxWidth(190);
             entradaD.wrapTextProperty();
             entradaD.setAlignment(Pos.CENTER);
             dados.getChildren().add(entradaD);
 
             Label SaidaD = new Label();
             SaidaD.setText("Saida");
-            SaidaD.setMinWidth(70);
+            SaidaD.setMinWidth(180);
             SaidaD.setWrapText(true);
-            SaidaD.setMaxWidth(70);
+            SaidaD.setMaxWidth(180);
             SaidaD.wrapTextProperty();
             SaidaD.setAlignment(Pos.CENTER);
             dados.getChildren().add(SaidaD);
@@ -238,32 +275,37 @@ public class VisitasControle {
             Vvisitas.getChildren().add(dados);
 
         for (Visita visita : possibilidades) {
+            if(visita.getCod() > possibilidades.size() - 200){
+
+            
             HBox pessoa = new HBox();
             pessoa.setSpacing(10);
             pessoa.setMinHeight(20);
             pessoa.setMinWidth(890);
-            pessoa.setAlignment(Pos.CENTER); // Centraliza verticalmente
+            pessoa.setAlignment(Pos.CENTER_LEFT); // Centraliza verticalmente
 
             Label Nome = new Label();
             Nome.setText(visita.getPesNome() + " " + visita.getTipo());
             Nome.setWrapText(true);
             Nome.setAlignment(Pos.CENTER);
+            Nome.setMinWidth(300);
             pessoa.getChildren().add(Nome);
+
 
             Label entrada = new Label();
             entrada.setText(visita.getEntrada());
             entrada.wrapTextProperty();
-            entrada.setMinWidth(70);
+            entrada.setMinWidth(200);
             entrada.setWrapText(true);
-            entrada.setMaxWidth(70);
+            entrada.setMaxWidth(200);
             entrada.setAlignment(Pos.CENTER);
             pessoa.getChildren().add(entrada);
 
             Label Saida = new Label();
             Saida.setText(visita.getSaida());
-            Saida.setMinWidth(70);
+            Saida.setMinWidth(200);
             Saida.setWrapText(true);
-            Saida.setMaxWidth(70);
+            Saida.setMaxWidth(200);
             Saida.wrapTextProperty();
             Saida.setAlignment(Pos.CENTER);
             pessoa.getChildren().add(Saida);
@@ -295,7 +337,34 @@ public class VisitasControle {
                 );
             }
             Vvisitas.getChildren().add(pessoa);
-        
+            }
+        }
+    }
+
+    private static void createSheetForTable(Connection conn, Workbook workbook, String tableName) throws SQLException {
+        String query = "SELECT * FROM " + tableName;
+        try (Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+
+            Sheet sheet = workbook.createSheet(tableName);
+            createHeaderRow(rs, sheet);
+
+            int rowNum = 1;
+            while (rs.next()) {
+                Row row = sheet.createRow(rowNum++);
+                for (int colNum = 1; colNum <= rs.getMetaData().getColumnCount(); colNum++) {
+                    org.apache.poi.ss.usermodel.Cell cell = row.createCell(colNum - 1);
+                    cell.setCellValue(rs.getString(colNum));
+                }
+            }
+        }
+    }
+
+    private static void createHeaderRow(ResultSet rs, Sheet sheet) throws SQLException {
+        Row headerRow = sheet.createRow(0);
+        for (int colNum = 1; colNum <= rs.getMetaData().getColumnCount(); colNum++) {
+            org.apache.poi.ss.usermodel.Cell cell = headerRow.createCell(colNum - 1);
+            cell.setCellValue(rs.getMetaData().getColumnName(colNum));
         }
     }
     

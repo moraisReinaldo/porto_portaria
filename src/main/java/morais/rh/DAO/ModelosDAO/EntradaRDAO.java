@@ -20,11 +20,8 @@ public class EntradaRDAO {
         boolean pode = true;
 
         for(EntradaRapida e : entradas){
-            System.out.println(e.getPesNome());
-            System.out.println(entrada.getPesNome());
             if((e.getPesNome().toUpperCase().trim().equals(entrada.getPesNome().toUpperCase().trim())) && (e.getEntPlaca().toUpperCase().trim().equals(entrada.getEntPlaca().toUpperCase().trim())) && (entrada.getEntRamal() == e.getEntRamal())){
                 pode = false;
-                System.out.println("Pode deu errado \n\n\n\n\n\n\n\n\n\n");
             }
         }
         if(pode){ 

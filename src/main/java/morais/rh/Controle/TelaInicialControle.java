@@ -12,7 +12,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import morais.rh.App;
-import morais.rh.DAO.ControleBanco;
 import morais.rh.DAO.ModelosDAO.EntradaRDAO;
 import morais.rh.DAO.ModelosDAO.UsuarioDAO;
 import morais.rh.DAO.ModelosDAO.VisitaDao;
@@ -95,12 +94,20 @@ public class TelaInicialControle {
     ArrayList<Visita> visitas = VisitaDao.buscarVisitasSQL();
     ArrayList<Visita> possibilidades = VisitaDao.buscarVisitasSQL();    
     ArrayList<EntradaRapida> fastE = EntradaRDAO.listarEntradasRapidas();
-    ArrayList<EntradaRapida> fastEE = EntradaRDAO.listarEntradasRapidas();
+    ArrayList<EntradaRapida> fastEE = new ArrayList<>();
     ArrayList<Usuario> usuarios = UsuarioDAO.buscarUsuarioSQL();
     Usuario usuAtual = usuarios.get(usuarios.get(0).getAtual());
     int ultimoC =  VisitaDao.buscarVisitasFechadas().get(VisitaDao.buscarVisitasFechadas().size() - 1).getCod();
 
     public void initialize() {
+
+        int ad = 0;
+        for(EntradaRapida ite : fastE){
+            if(ad < 30){
+                fastEE.add(ite);
+                ad++;
+            }
+        }
 
         if(VisitaDao.buscarVisitasFechadas().size() == 0 || VisitaDao.buscarVisitasSQL().size() == 0){
             if(VisitaDao.buscarVisitasFechadas().size() > VisitaDao.buscarVisitasSQL().size()){
@@ -135,8 +142,13 @@ public class TelaInicialControle {
                 }
                 atualizarTimers2();
             } else {
+                int pq = 0;
                 for (EntradaRapida ita : fastE) {
-                    fastEE.add(ita);
+                    if(pq < 20){
+                        fastEE.add(ita);
+                        pq ++;
+                    }
+                    
                 }
                 atualizarTimers2();
             }
@@ -183,7 +195,6 @@ public class TelaInicialControle {
 
         BControle.setOnAction((ActionEvent event) -> {
             try {
-                ControleBanco.Rduplicados();
                 App.setRoot("ControleV");
             } catch (IOException e) {
             }
@@ -214,7 +225,7 @@ public class TelaInicialControle {
         Vregistros.getChildren().clear(); // Limpa os registros existentes
 
         for (Visita visita : possibilidades) {
-            if(visita.getCod() > possibilidades.size() - 50){
+           
             HBox pessoa = new HBox();
             pessoa.setSpacing(10);
             pessoa.setMaxWidth(550);
@@ -320,7 +331,7 @@ public class TelaInicialControle {
             }
             pessoa.getChildren().add(finaliza);
             Vregistros.getChildren().add(pessoa);
-            }
+            
         }
     }
 
@@ -400,8 +411,10 @@ public class TelaInicialControle {
             finaliza.setAlignment(Pos.CENTER);
             finaliza.setOnAction((ActionEvent event) -> {                
                 try {
-                    if(temV(visita.getPesNome(), possibilidades)){
-                        finaliza.setStyle("-fx-background-color: #FF0000; -fx-text-fill: #FFFFFF;");
+                    if(temV(visita.getPesNome(), visitas)){
+                        finaliza.setStyle("-fx-background-color: #ff0000; ");
+                        finaliza.setText("Visita em aberto");
+                        
                     }else{
                         Visita viu = new Visita(ultimoC, " ", Hentrada, "Não informada",visita.getPesNome() , visita.getEntPlaca(), visita.getEntTipo(), visita.getEntRamal() , usuAtual.getUsuario());
                         VisitaDao.adicionaVisitaSQL(viu);
@@ -413,7 +426,6 @@ public class TelaInicialControle {
                     e.printStackTrace();
                 }
                 atualizarTimers();
-                atualizarTimers2();
             });
 
             pessoa.setStyle(
